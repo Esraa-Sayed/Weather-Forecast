@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_round_home_24"
+        android:title="@string/home"
+        />
+    <item
+        android:id="@+id/Favouriate"
+        android:icon="@drawable/ic_baseline_star_rate_24"
+        android:title="@string/favourites"
+        />
+    <item
+        android:id="@+id/Notify"
+        android:icon="@drawable/ic_baseline_notifications_24"
+        android:title="Alerts"
+        />
+</menu>
