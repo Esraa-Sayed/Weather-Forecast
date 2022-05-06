@@ -3,8 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/radio_flat_regular.xml" value="0.2703125" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/radio_flat_selected.xml" value="0.2703125" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/radio_flat_selector.xml" value="0.2703125" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/radio_flat_text_selector.xml" value="0.2703125" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/activity_main2.xml" value="0.25416666666666665" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/activity_setting.xml" value="0.264" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/content_main.xml" value="0.25416666666666665" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/fragment_alerts.xml" value="0.13020833333333334" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/fragment_favouriate.xml" value="0.13020833333333334" />
