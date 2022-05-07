@@ -7,12 +7,18 @@ import android.util.Log
 import android.widget.CompoundButton
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.lifecycle.ViewModelProvider
+import com.example.weatherforecast.Model.Repository
 
 import com.example.weatherforecast.R
+import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
+import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFactory
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlin.math.log
 
 class SettingActivity : AppCompatActivity() {
+    lateinit var viewModel: ViewModelMainActivtyAndSetting
+    lateinit var viewModelFactory: ViewModelMainActivtyAndSettingFactory
      lateinit var notification: SwitchMaterial
      lateinit var location:RadioGroup
      lateinit var windSpeed:RadioGroup
@@ -44,6 +50,12 @@ class SettingActivity : AppCompatActivity() {
                 notificationMode = "Off"
             }
         }
+        viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
+            Repository.getInstance(this)
+        )
+        viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
+        var data  = viewModel.getDataFromSharedPrefrences()
+
     }
     fun addRadioGroupListener(){
         lateinit var radioButton:RadioButton
