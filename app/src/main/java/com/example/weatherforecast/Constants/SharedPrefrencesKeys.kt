@@ -11,4 +11,5 @@ object SharedPrefrencesKeys {
     const val isNotFirstTime = "isNotFirstTime"
     const val preferenceFile = "SettingData"
     const val locationState = "locationState"
+    const val API_ID = "05a9a9b5ac16ee922e76bd1ca539e793"
 }

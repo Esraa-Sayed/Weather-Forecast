@@ -1,24 +1,20 @@
 
 package com.example.weatherforecast.Setting.view
 
-import android.app.Notification
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.CompoundButton
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
-import com.example.weatherforecast.Constants.SharedPrefrencesKeys.language
 import com.example.weatherforecast.LocaleHelperChangeLanguage.LocaleHelper
-import com.example.weatherforecast.Model.Repository
+import com.example.weatherforecast.repo.Repository
 
 import com.example.weatherforecast.R
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFactory
 import com.google.android.material.switchmaterial.SwitchMaterial
-import kotlin.math.log
 
 class SettingActivity : AppCompatActivity() {
     lateinit var viewModel: ViewModelMainActivtyAndSetting

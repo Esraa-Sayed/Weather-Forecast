@@ -2,7 +2,7 @@ package com.example.weatherforecast.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.weatherforecast.Model.RepositoryInterface
+import com.example.weatherforecast.repo.RepositoryInterface
 
 class ViewModelMainActivtyAndSettingFactory (private val _repo: RepositoryInterface): ViewModelProvider.Factory {
 

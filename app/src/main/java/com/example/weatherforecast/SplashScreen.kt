@@ -6,9 +6,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.ui.NavigationUI
 import com.example.weatherforecast.LocaleHelperChangeLanguage.LocaleHelper
-import com.example.weatherforecast.Model.Repository
+import com.example.weatherforecast.repo.Repository
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFactory
 

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeScreen.view.homeScreenFragment">
+    tools:context=".HomeScreen.view.homeScreenFragment"
+    android:background="@color/purple_200">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

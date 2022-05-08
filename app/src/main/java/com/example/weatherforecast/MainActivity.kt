@@ -4,35 +4,23 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
 import android.provider.Settings
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import com.example.weatherforecast.LocaleHelperChangeLanguage.LocaleHelper
-import com.example.weatherforecast.Model.Repository
+import com.example.weatherforecast.repo.Repository
 import com.example.weatherforecast.Setting.view.SettingActivity
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFactory
-import com.google.android.gms.location.*
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.launch
-import java.io.IOException
-import java.util.*
-import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView;

@@ -1,4 +1,6 @@
-package com.example.weatherforecast.Model
+package com.example.weatherforecast.repo
+
+import com.example.weatherforecast.Model.SharedPrefrencesDataClass
 
 interface RepositoryInterface {
     fun writeSettingDataInPreferencesForFirstTime()
@@ -8,5 +10,5 @@ interface RepositoryInterface {
     fun setStringToSharedPrefrences(key:String,value:String)
     fun setFloatToSharedPrefrences(key:String,value:Float)
     fun setBoolToSharedPrefrences(key:String,value:Boolean)
-    fun getDataFromSharedPrefrences():SharedPrefrencesDataClass
+    fun getDataFromSharedPrefrences(): SharedPrefrencesDataClass
 }

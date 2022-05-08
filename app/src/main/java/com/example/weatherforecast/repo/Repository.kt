@@ -1,4 +1,4 @@
-package com.example.weatherforecast.Model
+package com.example.weatherforecast.repo
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -6,11 +6,12 @@ import android.location.Geocoder
 import android.os.Looper
 import android.util.Log
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
+import com.example.weatherforecast.Model.SharedPrefrencesDataClass
 import com.google.android.gms.location.*
 import java.io.IOException
 import java.util.*
 
-class Repository private constructor(var context: Context):RepositoryInterface{
+class Repository private constructor(var context: Context): RepositoryInterface {
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     private var longitude:Float = 0.0f;
     private var latitude:Float = 0.0f;
@@ -30,10 +31,9 @@ class Repository private constructor(var context: Context):RepositoryInterface{
         editor.putString(SharedPrefrencesKeys.windSpeed, "Meter/Sec")
         editor.putString(SharedPrefrencesKeys.temperature, "Celsius")
         editor.putString(SharedPrefrencesKeys.language,getCurrentLanguage())
-
-        editor.putString(SharedPrefrencesKeys.locationState,"GPS")
         editor.putFloat(SharedPrefrencesKeys.longitude,longitude)
         editor.putFloat(SharedPrefrencesKeys.latitude,latitude)
+        editor.putString(SharedPrefrencesKeys.locationState,"GPS")
         editor.putBoolean(SharedPrefrencesKeys.notification,true)
         editor.putBoolean(SharedPrefrencesKeys.isNotFirstTime,true)
         editor.commit()
@@ -54,7 +54,7 @@ class Repository private constructor(var context: Context):RepositoryInterface{
 
         return preferences.getString(dataNeed, "notFound").toString()
     }
-    override fun getDataFromSharedPrefrences():SharedPrefrencesDataClass{
+    override fun getDataFromSharedPrefrences(): SharedPrefrencesDataClass {
         val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
         val windSpeed = preferences.getString(SharedPrefrencesKeys.windSpeed, "notFound").toString()
         val temp = preferences.getString(SharedPrefrencesKeys.temperature, "notFound").toString()
@@ -99,6 +99,7 @@ class Repository private constructor(var context: Context):RepositoryInterface{
                 val location = locationResult.lastLocation
                 longitude = location.longitude.toFloat()
                 latitude = location.latitude.toFloat()
+
                 getCityName()
                 Log.e("Location222", "getCurrentLocation: ${location.longitude}  , ${location.latitude}" )
                 fusedLocationProviderClient.removeLocationUpdates(locationCallback)
@@ -119,7 +120,10 @@ class Repository private constructor(var context: Context):RepositoryInterface{
             val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
             val editor = preferences.edit()
             editor.putString(SharedPrefrencesKeys.city,cityName)
+            editor.putFloat(SharedPrefrencesKeys.longitude,longitude)
+            editor.putFloat(SharedPrefrencesKeys.latitude,latitude)
             editor.commit()
+
             Log.e("locationCity", "getCityName: $cityName" )
         } catch (e: IOException) {
             Log.e("Error", "getCityName: ${e.localizedMessage}")
