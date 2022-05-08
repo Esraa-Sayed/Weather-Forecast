@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.WeatherForecast" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#00B4D8</item>
-        <item name="colorPrimaryVariant">#00B4D8</item>
+        <item name="colorPrimary">#3A92DA</item>
+        <item name="colorPrimaryVariant">#3A92DA</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#2196F3</item>

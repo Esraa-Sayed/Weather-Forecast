@@ -26,4 +26,7 @@
     <string name="notification">Notification:</string>
     <string name="english">English</string>
     <string name="arabic">Arabic</string>
+    <string name="language">Language</string>
+    <string name="settingLabel">Setting</string>
+    <string name="alerts">Alerts</string>
 </resources>

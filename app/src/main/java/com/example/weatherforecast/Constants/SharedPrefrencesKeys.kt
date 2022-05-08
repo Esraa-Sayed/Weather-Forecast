@@ -10,4 +10,5 @@ object SharedPrefrencesKeys {
     const val notification = "notification"
     const val isNotFirstTime = "isNotFirstTime"
     const val preferenceFile = "SettingData"
+    const val locationState = "locationState"
 }

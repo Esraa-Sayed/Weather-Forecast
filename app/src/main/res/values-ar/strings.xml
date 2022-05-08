@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">الطقس</string>
+    <string name="home">الرئيسية</string>
+    <string name="favourites">المفضل</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">اهلا فراجمينت</string>
+    <string name="setting">الأعدادت</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+
+
+    <string name="hello_first_fragment">اهلا الفراجيمنت الاولي</string>
+    <string name="location">الموقع</string>
+    <string name="gps">الحالي</string>
+    <string name="map">تحديد</string>
+    <string name="temperature">درجه الحرارة</string>
+    <string name="celsius">سيليزوس</string>
+    <string name="kelvin">كلفن</string>
+    <string name="fahrenheit">فهرنهايت</string>
+    <string name="wind_speed">سرعة الرياح</string>
+    <string name="meter_sec">متر/ث</string>
+    <string name="mile_hour">مل/ساعه</string>
+    <string name="notification">الأشعارات:</string>
+    <string name="english">انجليزي</string>
+    <string name="arabic">عربي</string>
+    <string name="language">اللغة</string>
+    <string name="settingLabel">الأعدادات</string>
+    <string name="alerts">اشعارات</string>
+</resources>

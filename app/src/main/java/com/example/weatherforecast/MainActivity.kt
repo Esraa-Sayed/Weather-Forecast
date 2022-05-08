@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.example.weatherforecast.LocaleHelperChangeLanguage.LocaleHelper
 import com.example.weatherforecast.Model.Repository
 import com.example.weatherforecast.Setting.view.SettingActivity
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
@@ -106,6 +107,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun initComponents(){
+        setTitle(R.string.app_name);
         bottomNavigationView = findViewById(R.id.bottomnavigation)
         val navController2 = findNavController(this, R.id.nav_host_fragment_activity_main)
         viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
@@ -113,5 +115,6 @@ class MainActivity : AppCompatActivity() {
         )
         viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
         setupWithNavController(bottomNavigationView, navController2)
+
     }
 }

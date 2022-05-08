@@ -30,7 +30,8 @@ class Repository private constructor(var context: Context):RepositoryInterface{
         editor.putString(SharedPrefrencesKeys.windSpeed, "Meter/Sec")
         editor.putString(SharedPrefrencesKeys.temperature, "Celsius")
         editor.putString(SharedPrefrencesKeys.language,getCurrentLanguage())
-        editor.putString(SharedPrefrencesKeys.city,cityName)
+
+        editor.putString(SharedPrefrencesKeys.locationState,"GPS")
         editor.putFloat(SharedPrefrencesKeys.longitude,longitude)
         editor.putFloat(SharedPrefrencesKeys.latitude,latitude)
         editor.putBoolean(SharedPrefrencesKeys.notification,true)
@@ -55,11 +56,12 @@ class Repository private constructor(var context: Context):RepositoryInterface{
     }
     override fun getDataFromSharedPrefrences():SharedPrefrencesDataClass{
         val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
-        val windSpeed = preferences.getString(SharedPrefrencesKeys.windSpeed, "Meter/Sec").toString()
-        val temp = preferences.getString(SharedPrefrencesKeys.temperature, "Celsius").toString()
+        val windSpeed = preferences.getString(SharedPrefrencesKeys.windSpeed, "notFound").toString()
+        val temp = preferences.getString(SharedPrefrencesKeys.temperature, "notFound").toString()
+        val locationState = preferences.getString(SharedPrefrencesKeys.locationState, "notFound").toString()
         val lang = preferences.getString(SharedPrefrencesKeys.language,getCurrentLanguage()).toString()
         var notification = preferences.getBoolean(SharedPrefrencesKeys.notification,true)
-        var data = SharedPrefrencesDataClass(windSpeed,temp,lang,notification)
+        var data = SharedPrefrencesDataClass(locationState,windSpeed,temp,lang,notification)
         return data
     }
     override fun setStringToSharedPrefrences(key:String, value:String){
@@ -114,6 +116,10 @@ class Repository private constructor(var context: Context):RepositoryInterface{
             val addresses = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
 
             cityName = addresses[0].adminArea
+            val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
+            val editor = preferences.edit()
+            editor.putString(SharedPrefrencesKeys.city,cityName)
+            editor.commit()
             Log.e("locationCity", "getCityName: $cityName" )
         } catch (e: IOException) {
             Log.e("Error", "getCityName: ${e.localizedMessage}")
