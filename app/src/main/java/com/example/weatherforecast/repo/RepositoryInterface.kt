@@ -1,6 +1,10 @@
 package com.example.weatherforecast.repo
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.example.weatherforecast.Model.SharedPrefrencesDataClass
+import com.example.weatherforecast.Model.WeatherModel
+import retrofit2.Response
 
 interface RepositoryInterface {
     fun writeSettingDataInPreferencesForFirstTime()
@@ -11,4 +15,6 @@ interface RepositoryInterface {
     fun setFloatToSharedPrefrences(key:String,value:Float)
     fun setBoolToSharedPrefrences(key:String,value:Boolean)
     fun getDataFromSharedPrefrences(): SharedPrefrencesDataClass
+    fun getAppSharedPrefrences(): SharedPreferences
+    fun isLocationSet():Boolean
 }

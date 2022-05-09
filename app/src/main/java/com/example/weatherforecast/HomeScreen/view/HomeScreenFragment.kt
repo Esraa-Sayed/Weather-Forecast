@@ -40,13 +40,13 @@ class homeScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpViewModel()
+        setUpViewModel(view.context)
         viewModel.observeOnSharedPref(view.context)
     }
-    private fun setUpViewModel(){
+    private fun setUpViewModel(context: Context){
         homeViewModelFactory = HomeViewModelFactory(
             WeatherDataRepo.getInstance(
-                WeatherClient.getInstance()))
+                WeatherClient.getInstance(),context))
         viewModel = ViewModelProvider(this,homeViewModelFactory)[HomeViewModel::class.java]
         viewModel.weatherData.observe(viewLifecycleOwner, Observer {
             Log.e("data", "setUpViewModel: "+it.toString() )

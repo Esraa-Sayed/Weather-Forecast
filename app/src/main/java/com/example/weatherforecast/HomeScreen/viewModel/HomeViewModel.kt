@@ -27,9 +27,9 @@ class HomeViewModel(private val _repo: WeatherDataRepoInterface): ViewModel()  {
             _errorMsgResponse.postValue(t.message)
         }
     }
-    fun getCurrentWeatherFromNetwork(context:Context) {
+    private fun getCurrentWeatherFromNetwork(context:Context) {
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
-            val currentWeatherResponse = _repo.getCurrentWeatherOverNetwork(context)
+            val currentWeatherResponse = _repo.getCurrentWeatherOverNetwork()
             if (currentWeatherResponse.isSuccessful) {
                 _weatherData.postValue(currentWeatherResponse.body())
             } else {
@@ -38,9 +38,8 @@ class HomeViewModel(private val _repo: WeatherDataRepoInterface): ViewModel()  {
         }
     }
     fun observeOnSharedPref(context: Context){
-         preferences =
-            context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
-        if (preferences.getFloat(SharedPrefrencesKeys.latitude, 0.0f) != 0.0f)
+         preferences = _repo.getAppSharedPrefrences()
+        if (_repo.isLocationSet())
         {
             getCurrentWeatherFromNetwork(context)
         }
@@ -48,7 +47,7 @@ class HomeViewModel(private val _repo: WeatherDataRepoInterface): ViewModel()  {
             val listener =
                 SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
                     if (key == SharedPrefrencesKeys.latitude) {
-                        if (preferences.getFloat(SharedPrefrencesKeys.latitude, 0.0f) != 0.0f) {
+                        if (_repo.isLocationSet()) {
                             getCurrentWeatherFromNetwork(context)
                         }
                     }

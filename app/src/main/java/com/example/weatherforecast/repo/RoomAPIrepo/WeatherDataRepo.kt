@@ -12,15 +12,15 @@ import com.example.weatherforecast.R
 import com.example.weatherforecast.repo.Repository
 import retrofit2.Response
 
-class WeatherDataRepo private constructor(var remoteSource: RemoteSource): WeatherDataRepoInterface{
+class WeatherDataRepo private constructor(var remoteSource: RemoteSource,var context: Context): WeatherDataRepoInterface{
     companion object {
 
         private var instance: WeatherDataRepo? = null
-        fun getInstance(remoteSource: RemoteSource): WeatherDataRepo {
-            return instance ?: WeatherDataRepo(remoteSource)
+        fun getInstance(remoteSource: RemoteSource, context: Context): WeatherDataRepo {
+            return instance ?: WeatherDataRepo(remoteSource,context)
         }
     }
-    override suspend fun getCurrentWeatherOverNetwork(context: Context): Response<WeatherModel> {
+    override suspend fun getCurrentWeatherOverNetwork(): Response<WeatherModel> {
 
         var repo = Repository.getInstance(context)
         var latitude = repo.readFloatFromSharedPreferences(SharedPrefrencesKeys.latitude)
@@ -35,11 +35,11 @@ class WeatherDataRepo private constructor(var remoteSource: RemoteSource): Weath
         }
         return remoteSource.getCurrentWeatherOverNetwork(latitude, longitude, language, measurementUnit)
     }
-    override fun isNotFirstTime(context: Context):Boolean{
-        var repo = Repository.getInstance(context)
-       return repo.readBooleanFromSharedPreferences(SharedPrefrencesKeys.isNotFirstTime)
-
+    override fun getAppSharedPrefrences():SharedPreferences{
+        return  Repository.getInstance(context).getAppSharedPrefrences()
     }
-
+    override fun isLocationSet():Boolean{
+        return Repository.getInstance(context).isLocationSet()
+    }
 
 }

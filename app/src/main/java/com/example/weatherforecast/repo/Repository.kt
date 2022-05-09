@@ -2,6 +2,7 @@ package com.example.weatherforecast.repo
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.location.Geocoder
 import android.os.Looper
 import android.util.Log
@@ -82,7 +83,14 @@ class Repository private constructor(var context: Context): RepositoryInterface 
         editor.putBoolean(key, value)
         editor.commit()
     }
-
+    override fun getAppSharedPrefrences():SharedPreferences{
+        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
+        return preferences
+    }
+    override fun isLocationSet():Boolean{
+        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
+        return preferences.getFloat(SharedPrefrencesKeys.latitude, 0.0f) != 0.0f
+    }
     @SuppressLint("MissingPermission")
     private fun getCurrentLocation(){
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( context)
@@ -140,4 +148,5 @@ class Repository private constructor(var context: Context): RepositoryInterface 
         }
         return currentlanguage
     }
+
 }

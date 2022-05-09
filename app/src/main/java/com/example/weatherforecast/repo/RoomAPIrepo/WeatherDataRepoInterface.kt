@@ -6,6 +6,7 @@ import com.example.weatherforecast.Model.WeatherModel
 import retrofit2.Response
 
 interface WeatherDataRepoInterface {
-    suspend fun getCurrentWeatherOverNetwork(context: Context): Response<WeatherModel>
-    fun isNotFirstTime(context: Context):Boolean
+    suspend fun getCurrentWeatherOverNetwork(): Response<WeatherModel>
+    fun getAppSharedPrefrences():SharedPreferences
+    fun isLocationSet():Boolean
 }
