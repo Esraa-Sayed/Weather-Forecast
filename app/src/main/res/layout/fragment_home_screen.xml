@@ -82,6 +82,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_64ssp"
                     android:textStyle="bold"
+                    android:layoutDirection="ltr"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +97,7 @@
                     android:text="°C"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_20ssp"
-
+                    android:layoutDirection="ltr"
                     app:layout_constraintStart_toEndOf="@+id/tempTextView"
                     app:layout_constraintTop_toTopOf="parent" />
 
