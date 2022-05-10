@@ -3,6 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/ic_baseline_visibility_24.xml" value="0.21354166666666666" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/ic_cloud.xml" value="0.21354166666666666" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/ic_humidity.xml" value="0.21354166666666666" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/ic_pressure.xml" value="0.21354166666666666" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/ic_sun_test.xml" value="0.21354166666666666" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/ic_ultra_violet.xml" value="0.21354166666666666" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/ic_wind.xml" value="0.21354166666666666" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/moon_planet_space_icon.xml" value="0.21354166666666666" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/radio_flat_regular.xml" value="0.2703125" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/radio_flat_selected.xml" value="0.2703125" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/radio_flat_selector.xml" value="0.2703125" />
@@ -12,9 +20,11 @@
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/activity_setting.xml" value="0.264" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/activity_splash_screen.xml" value="0.12604166666666666" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/content_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/day_row_for_weather.xml" value="0.22760416666666666" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/fragment_alerts.xml" value="0.13020833333333334" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/fragment_favouriate.xml" value="0.13020833333333334" />
-        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/fragment_home_screen.xml" value="0.25416666666666665" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/fragment_home_screen.xml" value="0.277602523659306" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/hourly_row_for_weather.xml" value="0.228125" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/settings_activity.xml" value="0.13020833333333334" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/menu/drawer_menu.xml" value="0.25416666666666665" />
@@ -29,5 +39,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.4" />
+      </ProjectState>
+    </option>
   </component>
 </project>

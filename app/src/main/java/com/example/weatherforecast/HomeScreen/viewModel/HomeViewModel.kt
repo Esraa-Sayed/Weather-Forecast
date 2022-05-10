@@ -44,7 +44,7 @@ class HomeViewModel(private val _repo: WeatherDataRepoInterface): ViewModel()  {
             getCurrentWeatherFromNetwork(context)
         }
         else{
-            val listener =
+             listener =
                 SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
                     if (key == SharedPrefrencesKeys.latitude) {
                         if (_repo.isLocationSet()) {
@@ -56,6 +56,7 @@ class HomeViewModel(private val _repo: WeatherDataRepoInterface): ViewModel()  {
         }
     }
     fun unRegisterOnSharedPreferenceChangeListener(){
-        preferences.unregisterOnSharedPreferenceChangeListener(listener)
+        if(this::listener.isInitialized)
+            preferences.unregisterOnSharedPreferenceChangeListener(listener)
     }
 }

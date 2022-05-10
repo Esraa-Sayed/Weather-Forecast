@@ -29,4 +29,10 @@
     <string name="language">Language</string>
     <string name="settingLabel">Setting</string>
     <string name="alerts">Alerts</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="cloud">Cloud</string>
+    <string name="ultra_violet">Ultra Violet</string>
+    <string name="visibility">Visibility</string>
 </resources>

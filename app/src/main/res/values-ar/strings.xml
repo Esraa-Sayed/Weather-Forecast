@@ -29,4 +29,10 @@
     <string name="language">اللغة</string>
     <string name="settingLabel">الأعدادات</string>
     <string name="alerts">اشعارات</string>
+    <string name="pressure">ضغط</string>
+    <string name="humidity">رطوبة</string>
+    <string name="wind">رياح</string>
+    <string name="cloud">سحب</string>
+    <string name="ultra_violet">فوق بنفسجي</string>
+    <string name="visibility">الرؤية</string>
 </resources>

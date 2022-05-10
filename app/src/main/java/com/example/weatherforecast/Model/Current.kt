@@ -1,24 +1,18 @@
 package com.example.weatherforecast.Model
 
+import com.example.weatherforecast.R
 import com.google.gson.annotations.SerializedName
 
 data class Current(
     val clouds: Int,
-    @SerializedName("dew_point")
-    val dewPoint: Double,
-    val dt: Int,
-    @SerializedName("feels_like")
-    val feelsLike: Double,
+    val visibility: Int,
+    @SerializedName("wind_speed")
+    val windSpeed: Double,
+    val uvi: Double,
     val humidity: Int,
     val pressure: Int,
-    val sunrise: Int,
-    val sunset: Int,
+
+    val dt: Int,
     val temp: Double,
-    val uvi: Double,
-    val visibility: Int,
     val weather: List<Weather>,
-    @SerializedName("wind_deg")
-    val windDeg: Int,
-    @SerializedName("wind_speed")
-    val windSpeed: Double
 )
