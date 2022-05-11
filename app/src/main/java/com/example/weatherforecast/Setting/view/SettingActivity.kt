@@ -43,7 +43,7 @@ class SettingActivity : AppCompatActivity() {
         temperature = findViewById(R.id.temperature)
         language = findViewById(R.id.language)
         viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
-            Repository.getInstance(this)
+            Repository.getInstance(null,this)
         )
         viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
         addRadioGroupListener()

@@ -1,8 +1,6 @@
 package com.example.weatherforecast.HomeScreen.view
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,12 +12,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherforecast.Constants.SharedPrefrencesKeys
 import com.example.weatherforecast.HomeScreen.viewModel.HomeViewModel
 import com.example.weatherforecast.HomeScreen.viewModel.HomeViewModelFactory
 import com.example.weatherforecast.Network.WeatherClient
 import com.example.weatherforecast.R
-import com.example.weatherforecast.repo.RoomAPIrepo.WeatherDataRepo
+import com.example.weatherforecast.repo.Repository
 import de.hdodenhof.circleimageview.CircleImageView
 
 class HomeScreenFragment : Fragment() {
@@ -62,12 +59,13 @@ class HomeScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         init(view)
         setUpViewModel(view.context)
+        putDataOnView()
         viewModel.observeOnSharedPref(view.context)
     }
 
     private fun setUpViewModel(context: Context){
         homeViewModelFactory = HomeViewModelFactory(
-            WeatherDataRepo.getInstance(
+            Repository.getInstance(
                 WeatherClient.getInstance(),context))
         viewModel = ViewModelProvider(this,homeViewModelFactory)[HomeViewModel::class.java]
         viewModel.weatherData.observe(viewLifecycleOwner, Observer {
@@ -113,6 +111,9 @@ class HomeScreenFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.unRegisterOnSharedPreferenceChangeListener()
+    }
+    private fun putDataOnView(){
+        city.text = viewModel.getCityName()
     }
 
 }

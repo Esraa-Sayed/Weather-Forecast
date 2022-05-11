@@ -16,7 +16,7 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
         var viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
-            Repository.getInstance(this)
+            Repository.getInstance(null,this)
         )
         var viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
         var data = viewModel.getDataFromSharedPrefrences()

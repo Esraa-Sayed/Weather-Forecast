@@ -17,4 +17,5 @@ interface RepositoryInterface {
     fun getDataFromSharedPrefrences(): SharedPrefrencesDataClass
     fun getAppSharedPrefrences(): SharedPreferences
     fun isLocationSet():Boolean
+    suspend fun getCurrentWeatherOverNetwork(): Response<WeatherModel>
 }

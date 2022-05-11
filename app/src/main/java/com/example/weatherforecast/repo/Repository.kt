@@ -8,21 +8,25 @@ import android.os.Looper
 import android.util.Log
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
 import com.example.weatherforecast.Model.SharedPrefrencesDataClass
+import com.example.weatherforecast.Model.WeatherModel
+import com.example.weatherforecast.Network.RemoteSource
+import com.example.weatherforecast.R
 import com.google.android.gms.location.*
+import retrofit2.Response
 import java.io.IOException
 import java.util.*
 
-class Repository private constructor(var context: Context): RepositoryInterface {
+class Repository private constructor(var remoteSource: RemoteSource?,var context: Context): RepositoryInterface {
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     private var longitude:Float = 0.0f;
     private var latitude:Float = 0.0f;
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
-    private  var cityName = ""
+
     companion object{
         private var instance: Repository? = null
-        fun getInstance(context: Context): Repository {
-            return instance ?: Repository(context)
+        fun getInstance(remoteSource: RemoteSource?, context: Context,): Repository {
+            return instance ?: Repository(remoteSource,context)
         }
     }
     override fun writeSettingDataInPreferencesForFirstTime() {
@@ -31,7 +35,7 @@ class Repository private constructor(var context: Context): RepositoryInterface 
         val editor = preferences.edit()
         editor.putString(SharedPrefrencesKeys.windSpeed, "Meter/Sec")
         editor.putString(SharedPrefrencesKeys.temperature, "Celsius")
-        editor.putString(SharedPrefrencesKeys.language,getCurrentLanguage())
+        editor.putString(SharedPrefrencesKeys.language,getCurrentDeviceLanguage())
         editor.putFloat(SharedPrefrencesKeys.longitude,longitude)
         editor.putFloat(SharedPrefrencesKeys.latitude,latitude)
         editor.putString(SharedPrefrencesKeys.locationState,"GPS")
@@ -60,7 +64,7 @@ class Repository private constructor(var context: Context): RepositoryInterface 
         val windSpeed = preferences.getString(SharedPrefrencesKeys.windSpeed, "notFound").toString()
         val temp = preferences.getString(SharedPrefrencesKeys.temperature, "notFound").toString()
         val locationState = preferences.getString(SharedPrefrencesKeys.locationState, "notFound").toString()
-        val lang = preferences.getString(SharedPrefrencesKeys.language,getCurrentLanguage()).toString()
+        val lang = preferences.getString(SharedPrefrencesKeys.language,getCurrentDeviceLanguage()).toString()
         var notification = preferences.getBoolean(SharedPrefrencesKeys.notification,true)
         var data = SharedPrefrencesDataClass(locationState,windSpeed,temp,lang,notification)
         return data
@@ -119,25 +123,30 @@ class Repository private constructor(var context: Context): RepositoryInterface 
 
     private fun getCityName(){
 
-        val geocoder = Geocoder(context, Locale("en"))
-
+        val geocoderEn = Geocoder(context, Locale("en"))
+        val geocoderAr = Geocoder(context, Locale("ar"))
+        var cityNameEn = ""
+        var cityNameAr = ""
         try {
-            val addresses = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
+            val addressesEn = geocoderEn.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
+            val addressesAr = geocoderAr.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
 
-            cityName = addresses[0].adminArea
+            cityNameEn = addressesEn[0].adminArea
+            cityNameAr = addressesAr[0].adminArea
             val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
             val editor = preferences.edit()
-            editor.putString(SharedPrefrencesKeys.city,cityName)
+            editor.putString(SharedPrefrencesKeys.cityEnglish,cityNameEn)
+            editor.putString(SharedPrefrencesKeys.cityArabic,cityNameAr)
             editor.putFloat(SharedPrefrencesKeys.longitude,longitude)
             editor.putFloat(SharedPrefrencesKeys.latitude,latitude)
             editor.commit()
 
-            Log.e("locationCity", "getCityName: $cityName" )
+            Log.e("locationCity", "getCityName: $cityNameEn ar: $cityNameAr" )
         } catch (e: IOException) {
             Log.e("Error", "getCityName: ${e.localizedMessage}")
         }
     }
-    private fun getCurrentLanguage():String{
+    private fun getCurrentDeviceLanguage():String{
         var currentlanguage = Locale.getDefault().getDisplayLanguage()
         if(currentlanguage.equals("العربية"))
         {
@@ -149,4 +158,17 @@ class Repository private constructor(var context: Context): RepositoryInterface 
         return currentlanguage
     }
 
+    override suspend fun getCurrentWeatherOverNetwork(): Response<WeatherModel> {
+        var latitude = readFloatFromSharedPreferences(SharedPrefrencesKeys.latitude)
+        var longitude = readFloatFromSharedPreferences(SharedPrefrencesKeys.longitude)
+        var language = readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+        var measurementUnit = ""
+        var tempreture = readStringFromSharedPreferences(SharedPrefrencesKeys.temperature)
+        when(tempreture){
+            context.getString(R.string.celsius) -> measurementUnit = "metric"
+            context.getString(R.string.fahrenheit)-> measurementUnit = "imperial"
+            context.getString(R.string.kelvin)-> measurementUnit = "standard"
+        }
+        return remoteSource!!.getCurrentWeatherOverNetwork(latitude, longitude, language, measurementUnit)
+    }
 }

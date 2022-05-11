@@ -9,12 +9,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
 import com.example.weatherforecast.Model.WeatherModel
-import com.example.weatherforecast.repo.RoomAPIrepo.WeatherDataRepoInterface
+import com.example.weatherforecast.repo.RepositoryInterface
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val _repo: WeatherDataRepoInterface): ViewModel()  {
+class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
     private var _weatherData = MutableLiveData<WeatherModel>()
     private var _errorMsgResponse = MutableLiveData<String>()
     val weatherData:LiveData<WeatherModel> = _weatherData
@@ -38,12 +38,12 @@ class HomeViewModel(private val _repo: WeatherDataRepoInterface): ViewModel()  {
         }
     }
     fun observeOnSharedPref(context: Context){
-         preferences = _repo.getAppSharedPrefrences()
         if (_repo.isLocationSet())
         {
             getCurrentWeatherFromNetwork(context)
         }
         else{
+            preferences = _repo.getAppSharedPrefrences()
              listener =
                 SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
                     if (key == SharedPrefrencesKeys.latitude) {
@@ -58,5 +58,12 @@ class HomeViewModel(private val _repo: WeatherDataRepoInterface): ViewModel()  {
     fun unRegisterOnSharedPreferenceChangeListener(){
         if(this::listener.isInitialized)
             preferences.unregisterOnSharedPreferenceChangeListener(listener)
+    }
+    fun getCityName():String{
+        val currrentAppLang = _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+        if(currrentAppLang == "en")
+            return _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.cityEnglish)
+        else
+            return _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.cityArabic)
     }
 }
