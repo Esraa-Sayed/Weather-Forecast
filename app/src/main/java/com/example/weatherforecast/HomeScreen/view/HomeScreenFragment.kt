@@ -44,6 +44,9 @@ class HomeScreenFragment : Fragment() {
     private lateinit var cloudTxt:TextView
     private lateinit var ultraVioletTxt:TextView
     private lateinit var visibilityTxt:TextView
+
+    private lateinit var  hourlyWeathersAdapter:HourlyWeathersAdapter
+    private lateinit var  daysWeathersAdapter:DaysWeathersAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,6 +64,8 @@ class HomeScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         init(view)
         setUpViewModel(view.context)
 
@@ -68,16 +73,18 @@ class HomeScreenFragment : Fragment() {
     }
 
     private fun setUpViewModel(context: Context){
-        homeViewModelFactory = HomeViewModelFactory(
-            Repository.getInstance(
-                WeatherClient.getInstance(),context))
-        viewModel = ViewModelProvider(this,homeViewModelFactory)[HomeViewModel::class.java]
+
         viewModel.weatherData.observe(viewLifecycleOwner, Observer {
             putDataOnView(it,context)
             Log.e("TAG", "setUpViewModel: "+it.toString() )
         })
     }
     private fun init(view: View){
+        homeViewModelFactory = HomeViewModelFactory(
+            Repository.getInstance(
+                WeatherClient.getInstance(),view.context))
+        viewModel = ViewModelProvider(this,homeViewModelFactory)[HomeViewModel::class.java]
+
         city = view.findViewById(R.id.city)
         date = view.findViewById(R.id.date)
         weatherDescription = view.findViewById(R.id.weatherDescription)
@@ -87,8 +94,8 @@ class HomeScreenFragment : Fragment() {
         hourlyForTheCurrentDate = view.findViewById(R.id.hourlyForTheCurrentDate)
         DaysForTheCurrentDate = view.findViewById(R.id.DaysForTheCurrentDate)
 
-        val hourlyWeathersAdapter = HourlyWeathersAdapter(view.context, emptyList())
-        val DaysWeathersAdapter = DaysWeathersAdapter(view.context, emptyList())
+        hourlyWeathersAdapter = HourlyWeathersAdapter(view.context, emptyList(),viewModel.getAppLanguage(),viewModel.getTempMeasuringUnit(view.context))
+        daysWeathersAdapter = DaysWeathersAdapter(view.context, emptyList(),viewModel.getAppLanguage(),viewModel.getTempMeasuringUnit(view.context))
         var layoutM = LinearLayoutManager(activity)
         hourlyForTheCurrentDate.apply {
             setHasFixedSize(true)
@@ -102,7 +109,7 @@ class HomeScreenFragment : Fragment() {
             setHasFixedSize(true)
             layoutManagerDays.orientation = RecyclerView.VERTICAL
             layoutManager = layoutManagerDays
-            adapter = DaysWeathersAdapter
+            adapter = daysWeathersAdapter
         }
 
         pressureTxt = view.findViewById(R.id.pressureTxt)
@@ -111,6 +118,8 @@ class HomeScreenFragment : Fragment() {
         cloudTxt = view.findViewById(R.id.cloudTxt)
         ultraVioletTxt = view.findViewById(R.id.ultraVioletTxt)
         visibilityTxt = view.findViewById(R.id.visibilityTxt)
+
+
 
     }
     override fun onDestroy() {
@@ -129,9 +138,20 @@ class HomeScreenFragment : Fragment() {
 
         pressureTxt.text = weatherCurrent.pressure.toString()
         humidityTxt.text = weatherCurrent.humidity.toString()
-        windTxt.text = weatherCurrent.windSpeed.toString()
         cloudTxt.text = weatherCurrent.clouds.toString()
         visibilityTxt.text = weatherCurrent.clouds.toString()
+        when( viewModel.getWindSpeedMeasuringUnit()){
+
+            context.getString(R.string.meter_sec) -> windTxt.text = weatherCurrent.windSpeed.toString()
+
+            else ->{
+                windTxt.text = (weatherCurrent.windSpeed * 2.237).toString()
+            }
+
+        }
+        daysWeathersAdapter.setDays(weather.daily)
+
+        hourlyWeathersAdapter.setHours(weather.hourly)
     }
 
 }

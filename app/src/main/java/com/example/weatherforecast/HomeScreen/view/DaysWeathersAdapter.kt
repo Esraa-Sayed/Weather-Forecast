@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherforecast.Constants.APIRequest
+import com.example.weatherforecast.Constants.APIRequest.roundTheNumber
 import com.example.weatherforecast.Model.Daily
 import com.example.weatherforecast.Model.Hourly
 import com.example.weatherforecast.R
 import de.hdodenhof.circleimageview.CircleImageView
 
-class DaysWeathersAdapter (private var context: Context, private var list: List<Daily>):
+class DaysWeathersAdapter (private var context: Context, private var days: List<Daily>,private val language:String,private val tempUnit:String):
     RecyclerView.Adapter<DaysWeathersAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaysWeathersAdapter.ViewHolder {
         val view =
@@ -23,10 +25,23 @@ class DaysWeathersAdapter (private var context: Context, private var list: List<
 
     override fun onBindViewHolder(holder: DaysWeathersAdapter.ViewHolder, position: Int) {
 
+        if(days.isNotEmpty()){
+            val day = days[position+1]
+            val time = APIRequest.getDateTime(day.dt,"MMM d",language)
+            holder.dayForCurrentWeather.text = time
+            holder.weatherDescriptionDay.text = day.weather[0].description
+            holder.temperatureDay.text = "${roundTheNumber(day.temp.max)}/ ${roundTheNumber(day.temp.min)} $tempUnit"
+            APIRequest.setImageInView(context, day.weather[0].icon, holder.tempIconDayRow)
+        }
+
     }
 
     override fun getItemCount(): Int {
         return 7
+    }
+    fun setDays(days: List<Daily>){
+        this.days = days
+        notifyDataSetChanged()
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

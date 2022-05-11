@@ -78,4 +78,7 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
             else-> "°K"
         }
     }
+    fun getWindSpeedMeasuringUnit():String{
+        return  _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.windSpeed)
+    }
 }

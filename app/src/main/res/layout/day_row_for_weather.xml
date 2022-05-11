@@ -20,13 +20,13 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#80FEE2C5">
+            android:background="#FEE2C5">
 
             <TextView
                 android:id="@+id/dayForCurrentWeather"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:text="Tomorrow"
                 android:textColor="#777777"
                 android:textSize="@dimen/_14ssp"
@@ -39,7 +39,6 @@
                 android:id="@+id/tempIconDayRow"
                 android:layout_width="@dimen/_50sdp"
                 android:layout_height="@dimen/_50sdp"
-                android:layout_marginStart="4dp"
                 android:src="@drawable/ic_sun_test"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/dayForCurrentWeather"
@@ -49,11 +48,9 @@
                 android:id="@+id/weatherDescriptionDay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_8sdp"
-                android:layout_marginStart="4dp"
                 android:text="Clear sky"
                 android:textColor="#777777"
-                android:textSize="@dimen/_14ssp"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tempIconDayRow"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -63,10 +60,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_8sdp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:text="13°C"
                 android:textColor="#777777"
-                android:textSize="@dimen/_16ssp"
+                android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
