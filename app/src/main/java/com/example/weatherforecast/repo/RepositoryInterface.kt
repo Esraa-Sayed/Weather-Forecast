@@ -2,6 +2,7 @@ package com.example.weatherforecast.repo
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.lifecycle.LiveData
 import com.example.weatherforecast.Model.SharedPrefrencesDataClass
 import com.example.weatherforecast.Model.WeatherModel
 import retrofit2.Response
@@ -18,4 +19,8 @@ interface RepositoryInterface {
     fun getAppSharedPrefrences(): SharedPreferences
     fun isLocationSet():Boolean
     suspend fun getCurrentWeatherOverNetwork(): Response<WeatherModel>
+    val allStoredWeatherModel: LiveData<List<WeatherModel>>
+    fun insertWeatherModel(weatherModel: WeatherModel)
+    fun getCurrentLocation()
+    fun deleteWeatherModel(weatherModel: WeatherModel)
 }

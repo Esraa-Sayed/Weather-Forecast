@@ -21,6 +21,9 @@ class ViewModelMainActivtyAndSetting(private val _repo: RepositoryInterface): Vi
     fun changeSettingFloat(key:String, value:Float){
         _repo.setFloatToSharedPrefrences(key,value)
     }
+    fun getLocationAndSaveItInSharedPref(){
+        _repo.getCurrentLocation()
+    }
     fun changeSettingBoolean(key:String, value:Boolean){
         _repo.setBoolToSharedPrefrences(key, value)
     }

@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +22,7 @@ import com.example.weatherforecast.HomeScreen.viewModel.HomeViewModelFactory
 import com.example.weatherforecast.Model.WeatherModel
 import com.example.weatherforecast.Network.WeatherClient
 import com.example.weatherforecast.R
+import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.repo.Repository
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -27,7 +30,7 @@ class HomeScreenFragment : Fragment() {
 
     private lateinit var homeViewModelFactory: HomeViewModelFactory
     private lateinit var viewModel: HomeViewModel
-
+    private lateinit var progressBar:ProgressBar
     //view
     private  lateinit var city:TextView
     private  lateinit var date:TextView
@@ -36,7 +39,9 @@ class HomeScreenFragment : Fragment() {
     private  lateinit var tempTypeTextView:TextView //°C مثلا
     private  lateinit var tempIcon:CircleImageView
     private  lateinit var hourlyForTheCurrentDate: RecyclerView
-    private  lateinit var DaysForTheCurrentDate: RecyclerView
+    private  lateinit var daysForTheCurrentDate: RecyclerView
+    private lateinit var cardView:CardView
+    private lateinit var cardView2:CardView
 
     private lateinit var pressureTxt:TextView
     private lateinit var humidityTxt:TextView
@@ -75,14 +80,20 @@ class HomeScreenFragment : Fragment() {
     private fun setUpViewModel(context: Context){
 
         viewModel.weatherData.observe(viewLifecycleOwner, Observer {
-            putDataOnView(it,context)
+            //putDataOnView(it,context)
+            viewModel.addWeatherModelInRoom(it)
             Log.e("TAG", "setUpViewModel: "+it.toString() )
+        })
+        viewModel.getLocalWeatherModele().observe(viewLifecycleOwner, Observer {
+
+            if (it.isNotEmpty())
+                putDataOnView(it[0],context)
         })
     }
     private fun init(view: View){
         homeViewModelFactory = HomeViewModelFactory(
             Repository.getInstance(
-                WeatherClient.getInstance(),view.context))
+                WeatherClient.getInstance(), ConcreteLocalSource(view.context),view.context))
         viewModel = ViewModelProvider(this,homeViewModelFactory)[HomeViewModel::class.java]
 
         city = view.findViewById(R.id.city)
@@ -92,8 +103,10 @@ class HomeScreenFragment : Fragment() {
         tempTypeTextView = view.findViewById(R.id.tempTypeTextView) //°C مثلا
         tempIcon = view.findViewById(R.id.tempIcon)
         hourlyForTheCurrentDate = view.findViewById(R.id.hourlyForTheCurrentDate)
-        DaysForTheCurrentDate = view.findViewById(R.id.DaysForTheCurrentDate)
-
+        daysForTheCurrentDate = view.findViewById(R.id.DaysForTheCurrentDate)
+        progressBar = view.findViewById(R.id.progressBar)
+        cardView = view.findViewById(R.id.cardView)
+        cardView2 = view.findViewById(R.id.cardView2)
         hourlyWeathersAdapter = HourlyWeathersAdapter(view.context, emptyList(),viewModel.getAppLanguage(),viewModel.getTempMeasuringUnit(view.context))
         daysWeathersAdapter = DaysWeathersAdapter(view.context, emptyList(),viewModel.getAppLanguage(),viewModel.getTempMeasuringUnit(view.context))
         var layoutM = LinearLayoutManager(activity)
@@ -105,7 +118,7 @@ class HomeScreenFragment : Fragment() {
         }
 
         var layoutManagerDays = LinearLayoutManager(activity)
-        DaysForTheCurrentDate .apply {
+        daysForTheCurrentDate .apply {
             setHasFixedSize(true)
             layoutManagerDays.orientation = RecyclerView.VERTICAL
             layoutManager = layoutManagerDays
@@ -119,7 +132,7 @@ class HomeScreenFragment : Fragment() {
         ultraVioletTxt = view.findViewById(R.id.ultraVioletTxt)
         visibilityTxt = view.findViewById(R.id.visibilityTxt)
 
-
+        hideView()
 
     }
     override fun onDestroy() {
@@ -152,6 +165,27 @@ class HomeScreenFragment : Fragment() {
         daysWeathersAdapter.setDays(weather.daily)
 
         hourlyWeathersAdapter.setHours(weather.hourly)
+        showView()
+    }
+    fun hideView(){
+        progressBar.visibility = View.VISIBLE
+        city.visibility = View.GONE
+        date.visibility = View.GONE
+        cardView.visibility = View.GONE
+        cardView2.visibility = View.GONE
+        tempIcon.visibility = View.GONE
+        hourlyForTheCurrentDate.visibility = View.GONE
+        daysForTheCurrentDate.visibility = View.GONE
+    }
+    fun showView(){
+        progressBar.visibility = View.GONE
+        city.visibility = View.VISIBLE
+        date.visibility = View.VISIBLE
+        cardView.visibility = View.VISIBLE
+        cardView2.visibility = View.VISIBLE
+        tempIcon.visibility = View.VISIBLE
+        hourlyForTheCurrentDate.visibility = View.VISIBLE
+        daysForTheCurrentDate.visibility = View.VISIBLE
     }
 
 }

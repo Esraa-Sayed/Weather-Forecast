@@ -2,6 +2,7 @@ package com.example.weatherforecast
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -18,6 +19,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.weatherforecast.repo.Repository
 import com.example.weatherforecast.Setting.view.SettingActivity
+import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initComponents()
+        initComponents(applicationContext)
     }
     override fun onStart() {
         super.onStart()
@@ -94,12 +96,12 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-    fun initComponents(){
+    fun initComponents(context:Context){
         setTitle(R.string.app_name);
         bottomNavigationView = findViewById(R.id.bottomnavigation)
         val navController2 = findNavController(this, R.id.nav_host_fragment_activity_main)
         viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
-            Repository.getInstance(null,this)
+            Repository.getInstance(null, null,this)
         )
         viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
         setupWithNavController(bottomNavigationView, navController2)

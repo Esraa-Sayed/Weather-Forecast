@@ -13,6 +13,7 @@ import com.example.weatherforecast.LocaleHelperChangeLanguage.LocaleHelper
 import com.example.weatherforecast.repo.Repository
 
 import com.example.weatherforecast.R
+import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFactory
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -44,7 +45,7 @@ class SettingActivity : AppCompatActivity() {
         language = findViewById(R.id.language)
 
         viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
-            Repository.getInstance(null,this)
+            Repository.getInstance(null, null,this)
         )
         viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
 
@@ -69,6 +70,8 @@ class SettingActivity : AppCompatActivity() {
             if (!flagOnClickListenerBecauseConfig){
                 radioButton = findViewById(checkedId)
                  locationText = radioButton.getText().toString()
+                if(locationText == "GPS")
+                    viewModel.getLocationAndSaveItInSharedPref()
                 viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,locationText)
             }
         }

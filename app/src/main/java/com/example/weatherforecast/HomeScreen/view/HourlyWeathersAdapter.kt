@@ -20,10 +20,10 @@ class HourlyWeathersAdapter(private var context: Context, private var hours: Lis
 
 
 
-    override fun onBindViewHolder(holder: HourlyWeathersAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if(hours.isNotEmpty()){
             val hour = hours[position+1]
-            holder.hourTime.text = APIRequest.getDateTime(hour.dt,"h a",language)
+            holder.hourTime.text = APIRequest.getDateTime(hour.dt,"hh a",language)
             holder.tempHour.text = "${hour.temp.toInt()}${tempUnit}"
             APIRequest.setImageInView(context,hour.weather[0].icon,holder.tempIconHourRow)
         }

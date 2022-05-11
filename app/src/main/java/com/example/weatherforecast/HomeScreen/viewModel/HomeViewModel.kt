@@ -39,22 +39,18 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
         }
     }
     fun observeOnSharedPref(context: Context){
-        if (_repo.isLocationSet())
-        {
-            getCurrentWeatherFromNetwork(context)
-        }
-        else{
-            preferences = _repo.getAppSharedPrefrences()
-             listener =
-                SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                    if (key == SharedPrefrencesKeys.latitude) {
-                        if (_repo.isLocationSet()) {
-                            getCurrentWeatherFromNetwork(context)
-                        }
+
+        preferences = _repo.getAppSharedPrefrences()
+         listener =
+            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+                if (key == SharedPrefrencesKeys.latitude) {
+                    if (_repo.isLocationSet()) {
+                        getCurrentWeatherFromNetwork(context)
                     }
                 }
-            preferences.registerOnSharedPreferenceChangeListener(listener)
-        }
+            }
+        preferences.registerOnSharedPreferenceChangeListener(listener)
+
     }
     fun unRegisterOnSharedPreferenceChangeListener(){
         if(this::listener.isInitialized)
@@ -80,5 +76,20 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
     }
     fun getWindSpeedMeasuringUnit():String{
         return  _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.windSpeed)
+    }
+    fun addWeatherModelInRoom(weatherModel: WeatherModel){
+        viewModelScope.launch(Dispatchers.IO) {
+            _repo.insertWeatherModel(weatherModel)
+        }
+    }
+    fun deleteWeatherModele(weatherModel: WeatherModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _repo.deleteWeatherModel(weatherModel)
+        }
+
+    }
+
+    fun getLocalWeatherModele(): LiveData<List<WeatherModel>> {
+        return _repo.allStoredWeatherModel
     }
 }

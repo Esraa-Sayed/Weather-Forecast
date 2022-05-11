@@ -6,17 +6,19 @@ import android.content.SharedPreferences
 import android.location.Geocoder
 import android.os.Looper
 import android.util.Log
+import androidx.lifecycle.LiveData
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
 import com.example.weatherforecast.Model.SharedPrefrencesDataClass
 import com.example.weatherforecast.Model.WeatherModel
 import com.example.weatherforecast.Network.RemoteSource
 import com.example.weatherforecast.R
+import com.example.weatherforecast.db.LocalSource
 import com.google.android.gms.location.*
 import retrofit2.Response
 import java.io.IOException
 import java.util.*
 
-class Repository private constructor(var remoteSource: RemoteSource?,var context: Context): RepositoryInterface {
+class Repository private constructor(var remoteSource: RemoteSource?, var localSource: LocalSource?, var context: Context): RepositoryInterface {
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     private var longitude:Float = 0.0f;
     private var latitude:Float = 0.0f;
@@ -25,8 +27,8 @@ class Repository private constructor(var remoteSource: RemoteSource?,var context
 
     companion object{
         private var instance: Repository? = null
-        fun getInstance(remoteSource: RemoteSource?, context: Context,): Repository {
-            return instance ?: Repository(remoteSource,context)
+        fun getInstance(remoteSource: RemoteSource?,localSource: LocalSource?, context: Context,): Repository {
+            return instance ?: Repository(remoteSource,localSource,context)
         }
     }
     override fun writeSettingDataInPreferencesForFirstTime() {
@@ -96,7 +98,7 @@ class Repository private constructor(var remoteSource: RemoteSource?,var context
         return preferences.getFloat(SharedPrefrencesKeys.latitude, 0.0f) != 0.0f
     }
     @SuppressLint("MissingPermission")
-    private fun getCurrentLocation(){
+    override fun getCurrentLocation(){
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( context)
         locationRequest = LocationRequest.create().apply {
             interval = 100
@@ -170,5 +172,15 @@ class Repository private constructor(var remoteSource: RemoteSource?,var context
             context.getString(R.string.kelvin)-> measurementUnit = "standard"
         }
         return remoteSource!!.getCurrentWeatherOverNetwork(latitude, longitude, language, measurementUnit)
+    }
+    override val allStoredWeatherModel: LiveData<List<WeatherModel>>
+        get() = localSource!!.allStoredWeatherModel
+
+    override fun insertWeatherModel(weatherModel: WeatherModel) {
+        localSource!!.insertWeatherModel(weatherModel)
+    }
+
+    override fun deleteWeatherModel(weatherModel: WeatherModel) {
+        localSource!!.deleteWeatherModel(weatherModel)
     }
 }

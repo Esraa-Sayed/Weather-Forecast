@@ -14,11 +14,25 @@
         android:paddingBottom="@dimen/_80sdp"
         tools:context=".HomeScreen.view.homeScreenFragment">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="75dp"
+            android:layout_height="61dp"
+            android:layout_marginTop="150dp"
+            android:elevation="@dimen/_14sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.523"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.226" />
+
         <TextView
             android:id="@+id/city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="5dp"
             android:text="Giza Governorate"
             android:textColor="#205375"
             android:textSize="@dimen/_16ssp"
@@ -78,11 +92,11 @@
                     android:id="@+id/tempTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layoutDirection="ltr"
                     android:text="13"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_40ssp"
                     android:textStyle="bold"
-                    android:layoutDirection="ltr"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -105,17 +119,18 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
+
         <de.hdodenhof.circleimageview.CircleImageView
 
             android:id="@+id/tempIcon"
             android:layout_width="@dimen/_220sdp"
             android:layout_height="@dimen/_220sdp"
             android:src="@drawable/test"
+
             app:layout_constraintBottom_toBottomOf="@+id/cardView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/hourlyForTheCurrentDate"
@@ -266,8 +281,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:textColor="@color/white"
                     android:text="@string/pressure"
+                    android:textColor="@color/white"
                     app:layout_constraintStart_toStartOf="@+id/pressureTxt"
                     app:layout_constraintTop_toBottomOf="@+id/pressureTxt" />
 
@@ -277,8 +292,8 @@
                     android:layout_height="21dp"
                     android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:textColor="@color/white"
                     android:text="@string/humidity"
+                    android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="@+id/ultraVioletImg"
                     app:layout_constraintStart_toStartOf="@+id/ultraVioletImg"
                     app:layout_constraintTop_toBottomOf="@+id/humidityTxt" />
@@ -290,8 +305,8 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="20dp"
                     android:gravity="center"
-                    android:textColor="@color/white"
                     android:text="@string/wind"
+                    android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/windTxt" />
 
@@ -302,8 +317,8 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:textColor="@color/white"
                     android:text="0%"
+                    android:textColor="@color/white"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cloudImg" />
