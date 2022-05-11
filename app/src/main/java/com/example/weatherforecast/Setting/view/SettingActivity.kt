@@ -1,6 +1,7 @@
 
 package com.example.weatherforecast.Setting.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,19 +18,18 @@ import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFacto
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingActivity : AppCompatActivity() {
-    lateinit var viewModel: ViewModelMainActivtyAndSetting
-    lateinit var viewModelFactory: ViewModelMainActivtyAndSettingFactory
-     lateinit var notification: SwitchMaterial
-     lateinit var location:RadioGroup
-     lateinit var windSpeed:RadioGroup
-     lateinit var temperature:RadioGroup
-     lateinit var language:RadioGroup
-    lateinit var radioButton:RadioButton
-     var locationText = "GPS"
-     var windSpeedText = "Meter/Sec"
-     var temperatureText = "Celsius"
-     var languageText = "English"
-     var notificationMode = "On"
+    private lateinit var viewModel: ViewModelMainActivtyAndSetting
+    private lateinit var viewModelFactory: ViewModelMainActivtyAndSettingFactory
+    private lateinit var notification: SwitchMaterial
+    private lateinit var location:RadioGroup
+    private lateinit var windSpeed:RadioGroup
+    private lateinit var temperature:RadioGroup
+    private lateinit var language:RadioGroup
+    private lateinit var radioButton:RadioButton
+    private lateinit var locationText:String
+    private lateinit var windSpeedText:String
+    private lateinit var temperatureText:String
+    private var flagOnClickListenerBecauseConfig = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
@@ -42,16 +42,19 @@ class SettingActivity : AppCompatActivity() {
         windSpeed = findViewById(R.id.windSpeed)
         temperature = findViewById(R.id.temperature)
         language = findViewById(R.id.language)
+
         viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
             Repository.getInstance(null,this)
         )
         viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
+
+
         addRadioGroupListener()
         addNotificationLisetener()
         setConfigrationData()
 
     }
-    fun addNotificationLisetener(){
+    private fun addNotificationLisetener(){
         notification.setOnCheckedChangeListener{_, isChecked ->
             if (isChecked) {
                 viewModel.changeSettingBoolean(SharedPrefrencesKeys.notification,isChecked)
@@ -60,36 +63,46 @@ class SettingActivity : AppCompatActivity() {
             }
         }
     }
-    fun addRadioGroupListener(){
+   private fun addRadioGroupListener(){
 
         location.setOnCheckedChangeListener{radioGroup, checkedId ->
-            radioButton = findViewById(checkedId)
-            locationText = radioButton.getText().toString()
-            viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,locationText)
+            if (!flagOnClickListenerBecauseConfig){
+                radioButton = findViewById(checkedId)
+                 locationText = radioButton.getText().toString()
+                viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,locationText)
+            }
         }
-        windSpeed.setOnCheckedChangeListener{radioGroup,checkedId->
-            radioButton = findViewById(checkedId)
-            windSpeedText = radioButton.getText().toString()
-            viewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed,windSpeedText)
+        windSpeed.setOnCheckedChangeListener { radioGroup, checkedId ->
+            if (!flagOnClickListenerBecauseConfig) {
+                radioButton = findViewById(checkedId)
+                windSpeedText = radioButton.getText().toString()
+                viewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed, windSpeedText)
+          }
         }
         temperature.setOnCheckedChangeListener{_,checkedId->
-            radioButton = findViewById(checkedId)
-            temperatureText = radioButton.getText().toString()
-            viewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,temperatureText)
+            if (!flagOnClickListenerBecauseConfig){
+                radioButton = findViewById(checkedId)
+                temperatureText = radioButton.getText().toString()
+                viewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,temperatureText)
+            }
         }
         language.setOnCheckedChangeListener{_,checkedId->
-            radioButton = findViewById(checkedId)
-            languageText = radioButton.getText().toString()
-            if (languageText == getString(R.string.english)) {
-                languageText = "en"
-                LocaleHelper.setAppLocale(this, "en")
+            if (!flagOnClickListenerBecauseConfig){
+                radioButton = findViewById(checkedId)
+                var languageText = radioButton.getText().toString()
+                if (languageText == getString(R.string.english)) {
+                    languageText = "en"
+                    LocaleHelper.setAppLocale(this, "en")
+                }
+                else {
+                    languageText = "ar"
+                    LocaleHelper.setAppLocale(this, "ar")
+                }
+                finish();
+                startActivity(intent);
+                viewModel.changeSettingStrings(SharedPrefrencesKeys.language,languageText)
+                Log.e("Tag", "addRadioGroupListener: ${languageText}" )
             }
-            else {
-                languageText = "ar"
-                LocaleHelper.setAppLocale(this, "ar")
-            }
-            viewModel.changeSettingStrings(SharedPrefrencesKeys.language,languageText)
-            Log.e("Tag", "addRadioGroupListener: ${languageText}" )
         }
     }
    private fun setConfigrationData(){
@@ -99,7 +112,14 @@ class SettingActivity : AppCompatActivity() {
         setTemperature(data.temperature)
         setLanguage(data.language)
         setNotification(data.notification)
-    }
+       flagOnClickListenerBecauseConfig = false
+
+       //to use it when change language
+       viewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,getTextOnCheckedRadioButton(temperature))
+       viewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed,getTextOnCheckedRadioButton(windSpeed))
+       viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,getTextOnCheckedRadioButton(location))
+
+   }
     private fun setLocationState(locationState:String) {
         if (locationState == "GPS") {
             radioButton = findViewById(R.id.GPS)
@@ -144,5 +164,11 @@ class SettingActivity : AppCompatActivity() {
     }
     private fun setNotification(notificationState: Boolean){
         notification.isChecked = notificationState
+    }
+    private fun getTextOnCheckedRadioButton(radioButtonGroup:RadioGroup):String{
+        val radioButtonID = radioButtonGroup.checkedRadioButtonId
+        radioButton = radioButtonGroup.findViewById(radioButtonID)
+        return radioButton.text.toString()
+
     }
 }

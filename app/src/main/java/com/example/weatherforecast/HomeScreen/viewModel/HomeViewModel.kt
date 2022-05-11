@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
 import com.example.weatherforecast.Model.WeatherModel
+import com.example.weatherforecast.R
 import com.example.weatherforecast.repo.RepositoryInterface
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -65,5 +66,16 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
             return _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.cityEnglish)
         else
             return _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.cityArabic)
+    }
+    fun getAppLanguage():String{
+         return  _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+    }
+    fun  getTempMeasuringUnit(context: Context):String{
+        val currentMeasuringUnit = _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.temperature)
+        return when(currentMeasuringUnit){
+            context.getString(R.string.celsius) -> "°C"
+            context.getString(R.string.fahrenheit)-> "°F"
+            else-> "°K"
+        }
     }
 }

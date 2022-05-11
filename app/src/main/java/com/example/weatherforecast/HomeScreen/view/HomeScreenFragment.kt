@@ -12,8 +12,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherforecast.Constants.APIRequest
+import com.example.weatherforecast.Constants.APIRequest.setImageInView
+
 import com.example.weatherforecast.HomeScreen.viewModel.HomeViewModel
 import com.example.weatherforecast.HomeScreen.viewModel.HomeViewModelFactory
+import com.example.weatherforecast.Model.WeatherModel
 import com.example.weatherforecast.Network.WeatherClient
 import com.example.weatherforecast.R
 import com.example.weatherforecast.repo.Repository
@@ -59,7 +63,7 @@ class HomeScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         init(view)
         setUpViewModel(view.context)
-        putDataOnView()
+
         viewModel.observeOnSharedPref(view.context)
     }
 
@@ -69,7 +73,8 @@ class HomeScreenFragment : Fragment() {
                 WeatherClient.getInstance(),context))
         viewModel = ViewModelProvider(this,homeViewModelFactory)[HomeViewModel::class.java]
         viewModel.weatherData.observe(viewLifecycleOwner, Observer {
-            Log.e("data", "setUpViewModel: "+it.toString() )
+            putDataOnView(it,context)
+            Log.e("TAG", "setUpViewModel: "+it.toString() )
         })
     }
     private fun init(view: View){
@@ -112,8 +117,21 @@ class HomeScreenFragment : Fragment() {
         super.onDestroy()
         viewModel.unRegisterOnSharedPreferenceChangeListener()
     }
-    private fun putDataOnView(){
+    private fun putDataOnView(weather:WeatherModel,context: Context){
         city.text = viewModel.getCityName()
+        var weatherCurrent = weather.current
+        var weatherDesc = weatherCurrent.weather[0]
+        date.text = APIRequest.getDateTime(weatherCurrent.dt,"EEE, d MMM ",viewModel.getAppLanguage())
+        weatherDescription.text = weatherDesc.description
+        tempTextView.text = weatherCurrent.temp.toString()
+        tempTypeTextView.text = viewModel.getTempMeasuringUnit(context)
+        setImageInView(context,weatherDesc.icon,tempIcon)
+
+        pressureTxt.text = weatherCurrent.pressure.toString()
+        humidityTxt.text = weatherCurrent.humidity.toString()
+        windTxt.text = weatherCurrent.windSpeed.toString()
+        cloudTxt.text = weatherCurrent.clouds.toString()
+        visibilityTxt.text = weatherCurrent.clouds.toString()
     }
 
 }
