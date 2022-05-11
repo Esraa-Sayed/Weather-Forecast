@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.Constants.APIRequest
-import com.example.weatherforecast.Constants.APIRequest.roundTheNumber
-import com.example.weatherforecast.Model.Daily
 import com.example.weatherforecast.Model.Hourly
 import com.example.weatherforecast.R
 import de.hdodenhof.circleimageview.CircleImageView
@@ -25,8 +23,8 @@ class HourlyWeathersAdapter(private var context: Context, private var hours: Lis
     override fun onBindViewHolder(holder: HourlyWeathersAdapter.ViewHolder, position: Int) {
         if(hours.isNotEmpty()){
             val hour = hours[position+1]
-            holder.hourTime.text = APIRequest.getDateTime(hour.dt,"hh:mm a",language)
-            holder.tempHour.text = "${roundTheNumber(hour.temp)}${tempUnit}"
+            holder.hourTime.text = APIRequest.getDateTime(hour.dt,"h a",language)
+            holder.tempHour.text = "${hour.temp.toInt()}${tempUnit}"
             APIRequest.setImageInView(context,hour.weather[0].icon,holder.tempIconHourRow)
         }
 

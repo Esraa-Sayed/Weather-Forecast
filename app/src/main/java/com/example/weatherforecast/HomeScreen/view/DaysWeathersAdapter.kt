@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.Constants.APIRequest
-import com.example.weatherforecast.Constants.APIRequest.roundTheNumber
 import com.example.weatherforecast.Model.Daily
-import com.example.weatherforecast.Model.Hourly
 import com.example.weatherforecast.R
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -30,7 +28,7 @@ class DaysWeathersAdapter (private var context: Context, private var days: List<
             val time = APIRequest.getDateTime(day.dt,"MMM d",language)
             holder.dayForCurrentWeather.text = time
             holder.weatherDescriptionDay.text = day.weather[0].description
-            holder.temperatureDay.text = "${roundTheNumber(day.temp.max)}/ ${roundTheNumber(day.temp.min)} $tempUnit"
+            holder.temperatureDay.text = "${day.temp.max.toInt()}/ ${day.temp.min.toInt()} $tempUnit"
             APIRequest.setImageInView(context, day.weather[0].icon, holder.tempIconDayRow)
         }
 

@@ -24,9 +24,4 @@ object APIRequest {
             .load("$IMG_URL${iconURL}@4x.png")
             .into(imgViewCurrentWeatherIcon)
     }
-    fun roundTheNumber(numInDouble: Double): String {
-
-        return "%.1f".format(numInDouble)
-
-    }
 }
