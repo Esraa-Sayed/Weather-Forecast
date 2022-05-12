@@ -53,7 +53,6 @@ class SettingActivity : AppCompatActivity() {
         addRadioGroupListener()
         addNotificationLisetener()
         setConfigrationData()
-
     }
     private fun addNotificationLisetener(){
         notification.setOnCheckedChangeListener{_, isChecked ->
@@ -117,10 +116,7 @@ class SettingActivity : AppCompatActivity() {
         setNotification(data.notification)
        flagOnClickListenerBecauseConfig = false
 
-       //to use it when change language
-       viewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,getTextOnCheckedRadioButton(temperature))
-       viewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed,getTextOnCheckedRadioButton(windSpeed))
-       viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,getTextOnCheckedRadioButton(location))
+
 
    }
     private fun setLocationState(locationState:String) {
@@ -143,10 +139,10 @@ class SettingActivity : AppCompatActivity() {
 
     }
    private fun  setTemperature(temperature:String){
-        if(temperature == "Celsius"){
+        if(temperature == getString(R.string.celsius)){
             radioButton = findViewById(R.id.Celsius)
             radioButton.isChecked = true
-        }else if(temperature == "Kelvin"){
+        }else if(temperature == getString(R.string.kelvin)){
             radioButton = findViewById(R.id.Kelvin)
             radioButton.isChecked = true
         }
@@ -167,11 +163,16 @@ class SettingActivity : AppCompatActivity() {
     }
     private fun setNotification(notificationState: Boolean){
         notification.isChecked = notificationState
+        //to use it when change language
+        viewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,getTextOnCheckedRadioButton(temperature))
+        viewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed,getTextOnCheckedRadioButton(windSpeed))
+        viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,getTextOnCheckedRadioButton(location))
     }
     private fun getTextOnCheckedRadioButton(radioButtonGroup:RadioGroup):String{
         val radioButtonID = radioButtonGroup.checkedRadioButtonId
         radioButton = radioButtonGroup.findViewById(radioButtonID)
-        return radioButton.text.toString()
+         val s = radioButton.text.toString()
+        return s
 
     }
 }
