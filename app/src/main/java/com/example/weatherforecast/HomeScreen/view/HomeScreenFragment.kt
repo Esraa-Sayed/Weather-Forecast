@@ -1,7 +1,9 @@
 package com.example.weatherforecast.HomeScreen.view
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.weatherforecast.Constants.APIRequest
 import com.example.weatherforecast.Constants.APIRequest.setImageInView
 
@@ -24,7 +27,12 @@ import com.example.weatherforecast.Network.WeatherClient
 import com.example.weatherforecast.R
 import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.repo.Repository
+import com.google.android.material.snackbar.Snackbar
 import de.hdodenhof.circleimageview.CircleImageView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+
+
+
 
 class HomeScreenFragment : Fragment() {
 
@@ -49,6 +57,7 @@ class HomeScreenFragment : Fragment() {
     private lateinit var cloudTxt:TextView
     private lateinit var ultraVioletTxt:TextView
     private lateinit var visibilityTxt:TextView
+    private lateinit var swipe: SwipeRefreshLayout
 
     private lateinit var  hourlyWeathersAdapter:HourlyWeathersAdapter
     private lateinit var  daysWeathersAdapter:DaysWeathersAdapter
@@ -69,26 +78,19 @@ class HomeScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         init(view)
-        setUpViewModel(view.context)
-
-        viewModel.observeOnSharedPref(view.context)
+        setUpViewModel(view)
     }
 
-    private fun setUpViewModel(context: Context){
-
-        viewModel.weatherData.observe(viewLifecycleOwner, Observer {
-            //putDataOnView(it,context)
-            viewModel.addWeatherModelInRoom(it)
-            Log.e("TAG", "setUpViewModel: "+it.toString() )
-        })
+    private fun setUpViewModel(view: View){
+        viewModel.getWeatherView(viewLifecycleOwner,view)
         viewModel.getLocalWeatherModele().observe(viewLifecycleOwner, Observer {
-
-            if (it.isNotEmpty())
-                putDataOnView(it[0],context)
+            if (it.isNotEmpty()) {
+                putDataOnView(it[0], view.context)
+                swipe.setRefreshing(false)
+            }
         })
+
     }
     private fun init(view: View){
         homeViewModelFactory = HomeViewModelFactory(
@@ -132,8 +134,19 @@ class HomeScreenFragment : Fragment() {
         ultraVioletTxt = view.findViewById(R.id.ultraVioletTxt)
         visibilityTxt = view.findViewById(R.id.visibilityTxt)
 
+        swipe = view.findViewById(R.id.swipe)
+        setSwipeListener(view)
         hideView()
 
+    }
+    private fun setSwipeListener(view: View){
+        swipe.setOnRefreshListener{
+            viewModel.getWeatherView(viewLifecycleOwner, view)
+            Handler().postDelayed({ // Stop animation (This will be after 3 seconds)
+                swipe.setRefreshing(false)
+            }, 7000) // Delay in millis
+
+        }
     }
     override fun onDestroy() {
         super.onDestroy()
