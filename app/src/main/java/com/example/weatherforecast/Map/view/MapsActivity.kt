@@ -39,7 +39,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var viewModel: ViewModelMainActivtyAndSetting
     private lateinit var viewModelFactory: ViewModelMainActivtyAndSettingFactory
     companion object{
-      const val DEFAULT_ZOOM = 10f
+      const val DEFAULT_ZOOM = 5f
 
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,6 +135,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         this.googleMap = googleMap
         moveCamera(getLatitude().toDouble(), getLongitude().toDouble())
         addMarker(getLatitude().toDouble(), getLongitude().toDouble(), "")
+        googleMap.setOnMapClickListener {
+            googleMap.clear();
+            Log.e("TAG", "geolocate: address: ${it.latitude}  Lon: ${it.longitude}" )
+            addMarker(it.latitude, it.longitude, "new")
+        }
      //   addMyCurrentLocation(googleMap)
 
     }
