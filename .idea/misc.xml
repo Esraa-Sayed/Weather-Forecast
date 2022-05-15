@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/cloud_sun_sunny_weather_icon.xml" value="0.1425925925925926" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.24814814814814815" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/ic_baseline_visibility_24.xml" value="0.21354166666666666" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/ic_cloud.xml" value="0.21354166666666666" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/ic_humidity.xml" value="0.21354166666666666" />
@@ -17,7 +19,8 @@
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/drawable/radio_flat_text_selector.xml" value="0.2703125" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/activity_main2.xml" value="0.25416666666666665" />
-        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/activity_setting.xml" value="0.264" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/activity_maps.xml" value="0.4" />
+        <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/activity_setting.xml" value="0.38078902229845624" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/activity_splash_screen.xml" value="0.12604166666666666" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/content_main.xml" value="0.25416666666666665" />
         <entry key="..\:/5th year ITI/Android/Kotlin/Labs/WeatherForecast/app/src/main/res/layout/day_row_for_weather.xml" value="0.22760416666666666" />

@@ -101,9 +101,9 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
     override fun getCurrentLocation(){
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( context)
         locationRequest = LocationRequest.create().apply {
-            interval = 100
-            fastestInterval = 50
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
             maxWaitTime = 5000
         }
         //setUplocationCallback

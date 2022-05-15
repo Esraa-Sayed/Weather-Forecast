@@ -27,5 +27,8 @@ class ViewModelMainActivtyAndSetting(private val _repo: RepositoryInterface): Vi
     fun changeSettingBoolean(key:String, value:Boolean){
         _repo.setBoolToSharedPrefrences(key, value)
     }
+    fun readFloatFromSharedPreferences(dataNeed: String):Float{
+        return _repo.readFloatFromSharedPreferences(dataNeed)
+    }
 
 }

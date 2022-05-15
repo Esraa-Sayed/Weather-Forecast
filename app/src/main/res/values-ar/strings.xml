@@ -35,4 +35,7 @@
     <string name="cloud">سحب</string>
     <string name="ultra_violet">فوق بنفسجي</string>
     <string name="visibility">الرؤية</string>
+    <string name="title_activity_maps">الخريطة</string>
+    <string name="No_internet_connection">لا يوجد أنترنت</string>
+    <string name="enter_address_city_or_zip_code">أدخل العنوان أو المدينة أو الرمز البريدي</string>
 </resources>

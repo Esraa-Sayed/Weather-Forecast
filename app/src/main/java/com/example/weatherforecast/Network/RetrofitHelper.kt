@@ -1,5 +1,6 @@
 package com.example.day3.Network
 
+import com.example.weatherforecast.BuildConfig
 import com.example.weatherforecast.Constants.APIRequest
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
@@ -15,7 +16,7 @@ object RetrofitHelper {
             val url = chain.request()
                 .url
                 .newBuilder()
-                .addQueryParameter("appid", APIRequest.API_ID)
+                .addQueryParameter("appid", BuildConfig.API_CURRENT_WEATHER_ID)
                 .build()
             val request = chain.request()
                 .newBuilder()

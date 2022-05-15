@@ -171,7 +171,7 @@ class HomeScreenFragment : Fragment() {
             context.getString(R.string.meter_sec) -> windTxt.text = weatherCurrent.windSpeed.toString()
 
             else ->{
-                windTxt.text = (weatherCurrent.windSpeed * 2.237).toString()
+                windTxt.text = ((weatherCurrent.windSpeed * 2.237).toInt()).toString()
             }
 
         }

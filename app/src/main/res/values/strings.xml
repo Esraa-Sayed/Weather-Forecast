@@ -35,4 +35,7 @@
     <string name="cloud">Cloud</string>
     <string name="ultra_violet">Ultra Violet</string>
     <string name="visibility">Visibility</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="No_internet_connection">No internet connection</string>
+    <string name="enter_address_city_or_zip_code">Enter Address, City or Zip Code</string>
 </resources>

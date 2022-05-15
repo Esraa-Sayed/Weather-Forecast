@@ -100,7 +100,7 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
             Log.e("TAG", "setUpViewModel: "+it.toString() )
         })
         errorMsgResponse.observe(viewLifecycleOwner, Observer {
-            Snackbar.make(view,"No internet connection", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(view,view.context.getString(R.string.No_internet_connection), Snackbar.LENGTH_LONG).show()
         })
     }
 }
