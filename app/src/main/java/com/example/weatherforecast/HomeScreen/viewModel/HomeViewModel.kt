@@ -93,14 +93,5 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
     fun getLocalWeatherModele(): LiveData<List<WeatherModel>> {
         return _repo.allStoredWeatherModel
     }
-    fun getWeatherView(viewLifecycleOwner: LifecycleOwner,view:View){
-        observeOnSharedPref(view.context)
-        weatherData.observe(viewLifecycleOwner, Observer {
-            addWeatherModelInRoom(it)
-            Log.e("TAG", "setUpViewModel: "+it.toString() )
-        })
-        errorMsgResponse.observe(viewLifecycleOwner, Observer {
-            Snackbar.make(view,view.context.getString(R.string.No_internet_connection), Snackbar.LENGTH_LONG).show()
-        })
-    }
+
 }

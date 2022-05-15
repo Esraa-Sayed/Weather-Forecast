@@ -1,7 +1,6 @@
 package com.example.weatherforecast.Map.view
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -29,6 +28,9 @@ import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFacto
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
+import androidx.appcompat.app.AlertDialog
+import com.example.weatherforecast.Constants.IntentKeys
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -91,6 +93,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.e("TAG", "geolocate: address: $address" )
             moveCamera(address.latitude, address.longitude)
             addMarker(address.latitude, address.longitude, address.adminArea)
+            showConfirmDialog(LatLng(address.latitude,address.longitude))
         }
 
     }
@@ -108,27 +111,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     fun addMarker(latitude:Double, longitude:Double, title:String){
         val currentLocation = LatLng(latitude, longitude)
+        googleMap.clear();
         googleMap.addMarker(MarkerOptions().position(currentLocation).title(title))
 
 
-    }
-
-    fun addMyCurrentLocation(googleMap: GoogleMap){
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                12
-            )
-        }
-        googleMap.isMyLocationEnabled = true
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -136,14 +122,42 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         moveCamera(getLatitude().toDouble(), getLongitude().toDouble())
         addMarker(getLatitude().toDouble(), getLongitude().toDouble(), "")
         googleMap.setOnMapClickListener {
-            googleMap.clear();
-            Log.e("TAG", "geolocate: address: ${it.latitude}  Lon: ${it.longitude}" )
             addMarker(it.latitude, it.longitude, "new")
+            showConfirmDialog(it)
         }
      //   addMyCurrentLocation(googleMap)
 
     }
     private fun getAppLangauge():String{
         return viewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+    }
+    private fun showConfirmDialog(latLng: LatLng) {
+        val builder: AlertDialog.Builder =  AlertDialog.Builder(this)
+        builder.setCancelable(true)
+        builder.setTitle(getString(R.string.confirmation_message))
+        builder.setMessage(getString(R.string.are_You_Sure))
+        builder.setPositiveButton(getString(R.string.Confirm)) { dialog, which ->
+            if ( whoOpenMapActivity() == IntentKeys.SETTING_ACTIVITY){
+                Log.e("TAG", "geolocate: addressYYYYYYYYYYES" )
+                saveLocationOnSharedPrefrences(latLng)
+                finish()
+            }
+        }
+        builder.setNegativeButton(android.R.string.cancel){ dialog, which -> }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+    }
+    private fun whoOpenMapActivity():String{
+        return intent.getStringExtra(IntentKeys.COME_FROM).toString()
+    }
+    private fun saveLocationOnSharedPrefrences(latLng: LatLng){
+        viewModel.changeSettingFloat(SharedPrefrencesKeys.latitude, latLng.latitude.toFloat())
+        viewModel.changeSettingFloat(SharedPrefrencesKeys.latitude, latLng.longitude.toFloat())
+        val cityNameAr = SharedPrefrencesKeys.getCityNameFromLatAndLong(this,"ar", latLng.latitude,latLng.longitude)
+        val cityNameEn = SharedPrefrencesKeys.getCityNameFromLatAndLong(this,"en", latLng.latitude,latLng.longitude)
+        viewModel.changeSettingStrings(SharedPrefrencesKeys.cityArabic,cityNameAr)
+        viewModel.changeSettingStrings(SharedPrefrencesKeys.cityEnglish,cityNameEn)
     }
 }

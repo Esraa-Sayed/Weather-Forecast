@@ -65,7 +65,7 @@
                     android:text="@string/gps"
                     />
                 <RadioButton
-                    android:id="@+id/Map"
+                    android:id="@+id/mapRadioButton"
                     android:layout_width="@dimen/_70sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:background="@drawable/radio_flat_selector"

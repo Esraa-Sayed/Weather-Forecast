@@ -22,7 +22,7 @@ class SplashScreen : AppCompatActivity() {
         var viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
         var data = viewModel.getDataFromSharedPrefrences()
         var lang = data.language
-        if(data.locationState == "GPS")
+        if(data.locationState == getString(R.string.gps))
             viewModel.getLocationAndSaveItInSharedPref()
         LocaleHelper.setAppLocale(this, lang);
         Handler(Looper.getMainLooper()).postDelayed({

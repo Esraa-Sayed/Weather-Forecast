@@ -3,11 +3,11 @@ package com.example.weatherforecast.repo
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.location.Geocoder
 import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
+import com.example.weatherforecast.Constants.SharedPrefrencesKeys.getCityNameFromLatAndLong
 import com.example.weatherforecast.Model.SharedPrefrencesDataClass
 import com.example.weatherforecast.Model.WeatherModel
 import com.example.weatherforecast.Network.RemoteSource
@@ -124,29 +124,26 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
     }
 
     private fun getCityName(){
-
-        val geocoderEn = Geocoder(context, Locale("en"))
-        val geocoderAr = Geocoder(context, Locale("ar"))
         var cityNameEn = ""
         var cityNameAr = ""
         try {
-            val addressesEn = geocoderEn.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
-            val addressesAr = geocoderAr.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
+            cityNameEn = getCityNameFromLatAndLong(context, "en", latitude.toDouble(), longitude.toDouble())
+            cityNameAr = getCityNameFromLatAndLong(context, "ar", latitude.toDouble(), longitude.toDouble())
+            saveCityNamesArabicAndEnglishInSharedPrefrences(cityNameEn,cityNameAr)
 
-            cityNameEn = addressesEn[0].adminArea
-            cityNameAr = addressesAr[0].adminArea
-            val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
-            val editor = preferences.edit()
-            editor.putString(SharedPrefrencesKeys.cityEnglish,cityNameEn)
-            editor.putString(SharedPrefrencesKeys.cityArabic,cityNameAr)
-            editor.putFloat(SharedPrefrencesKeys.longitude,longitude)
-            editor.putFloat(SharedPrefrencesKeys.latitude,latitude)
-            editor.commit()
-
-            Log.e("locationCity", "getCityName: $cityNameEn ar: $cityNameAr" )
         } catch (e: IOException) {
             Log.e("Error", "getCityName: ${e.localizedMessage}")
         }
+    }
+    private fun saveCityNamesArabicAndEnglishInSharedPrefrences(cityNameEn: String, cityNameAr: String) {
+        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
+        val editor = preferences.edit()
+        editor.putString(SharedPrefrencesKeys.cityEnglish,cityNameEn)
+        editor.putString(SharedPrefrencesKeys.cityArabic,cityNameAr)
+        editor.putFloat(SharedPrefrencesKeys.longitude,longitude)
+        editor.putFloat(SharedPrefrencesKeys.latitude,latitude)
+        editor.commit()
+        Log.e("locationCity", "getCityName: $cityNameEn ar: $cityNameAr" )
     }
     private fun getCurrentDeviceLanguage():String{
         var currentlanguage = Locale.getDefault().getDisplayLanguage()

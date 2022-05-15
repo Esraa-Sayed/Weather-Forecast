@@ -8,8 +8,10 @@ import android.util.Log
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.lifecycle.ViewModelProvider
+import com.example.weatherforecast.Constants.IntentKeys
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
 import com.example.weatherforecast.LocaleHelperChangeLanguage.LocaleHelper
+import com.example.weatherforecast.Map.view.MapsActivity
 import com.example.weatherforecast.repo.Repository
 
 import com.example.weatherforecast.R
@@ -27,6 +29,7 @@ class SettingActivity : AppCompatActivity() {
     private lateinit var temperature:RadioGroup
     private lateinit var language:RadioGroup
     private lateinit var radioButton:RadioButton
+    private lateinit var mapRadioButton:RadioButton
     private lateinit var locationText:String
     private lateinit var windSpeedText:String
     private lateinit var temperatureText:String
@@ -43,7 +46,7 @@ class SettingActivity : AppCompatActivity() {
         windSpeed = findViewById(R.id.windSpeed)
         temperature = findViewById(R.id.temperature)
         language = findViewById(R.id.language)
-
+        mapRadioButton = findViewById(R.id.mapRadioButton)
         viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
             Repository.getInstance(null, null,this)
         )
@@ -65,13 +68,20 @@ class SettingActivity : AppCompatActivity() {
     }
    private fun addRadioGroupListener(){
 
+       mapRadioButton.setOnClickListener {
+           openMap()
+           viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState, mapRadioButton.getText().toString())
+       }
         location.setOnCheckedChangeListener{radioGroup, checkedId ->
             if (!flagOnClickListenerBecauseConfig){
                 radioButton = findViewById(checkedId)
                  locationText = radioButton.getText().toString()
-                if(locationText == "GPS")
+                if(locationText == getString(R.string.gps))
+                {
                     viewModel.getLocationAndSaveItInSharedPref()
-                viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,locationText)
+                    viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,locationText)
+                }
+
             }
         }
         windSpeed.setOnCheckedChangeListener { radioGroup, checkedId ->
@@ -107,6 +117,11 @@ class SettingActivity : AppCompatActivity() {
             }
         }
     }
+    private fun  openMap(){
+        var intent = Intent(this,MapsActivity::class.java)
+        intent.putExtra(IntentKeys.COME_FROM, IntentKeys.SETTING_ACTIVITY)
+        startActivity(intent)
+    }
    private fun setConfigrationData(){
         var data  = viewModel.getDataFromSharedPrefrences()
         setLocationState(data.locationState)
@@ -120,16 +135,16 @@ class SettingActivity : AppCompatActivity() {
 
    }
     private fun setLocationState(locationState:String) {
-        if (locationState == "GPS") {
+        if (locationState == "GPS" || locationState == "الحالي") {
             radioButton = findViewById(R.id.GPS)
             radioButton.isChecked = true
         }else{
-            radioButton = findViewById(R.id.Map)
+            radioButton = findViewById(R.id.mapRadioButton)
             radioButton.isChecked = true
         }
     }
     private fun setWindSpeed(windSpeed:String){
-        if(windSpeed == "Meter/Sec"){
+        if(windSpeed == "Meter/Sec" || windSpeed == "متر/ث"){
             radioButton = findViewById(R.id.MeterSec)
             radioButton.isChecked = true
         }else {
@@ -139,10 +154,10 @@ class SettingActivity : AppCompatActivity() {
 
     }
    private fun  setTemperature(temperature:String){
-        if(temperature == getString(R.string.celsius)){
+        if(temperature == "Celsius" || temperature == "سيليزوس"){
             radioButton = findViewById(R.id.Celsius)
             radioButton.isChecked = true
-        }else if(temperature == getString(R.string.kelvin)){
+        }else if(temperature == "Kelvin" || temperature == "كلفن"){
             radioButton = findViewById(R.id.Kelvin)
             radioButton.isChecked = true
         }

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -83,7 +84,7 @@ class HomeScreenFragment : Fragment() {
     }
 
     private fun setUpViewModel(view: View){
-        viewModel.getWeatherView(viewLifecycleOwner,view)
+        getWeatherView(view)
         viewModel.getLocalWeatherModele().observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
                 putDataOnView(it[0], view.context)
@@ -91,6 +92,16 @@ class HomeScreenFragment : Fragment() {
             }
         })
 
+    }
+    fun getWeatherView(view:View){
+        viewModel.observeOnSharedPref(view.context)
+        viewModel.weatherData.observe(viewLifecycleOwner, Observer {
+            viewModel.addWeatherModelInRoom(it)
+            Log.e("TAG", "setUpViewModel: "+it.toString() )
+        })
+        viewModel.errorMsgResponse.observe(viewLifecycleOwner, Observer {
+            Snackbar.make(view,view.context.getString(R.string.No_internet_connection), Snackbar.LENGTH_LONG).show()
+        })
     }
     private fun init(view: View){
         homeViewModelFactory = HomeViewModelFactory(
@@ -141,7 +152,7 @@ class HomeScreenFragment : Fragment() {
     }
     private fun setSwipeListener(view: View){
         swipe.setOnRefreshListener{
-            viewModel.getWeatherView(viewLifecycleOwner, view)
+           getWeatherView(view)
             Handler().postDelayed({ // Stop animation (This will be after 3 seconds)
                 swipe.setRefreshing(false)
             }, 7000) // Delay in millis
