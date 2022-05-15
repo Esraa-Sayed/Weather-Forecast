@@ -30,5 +30,8 @@ class ViewModelMainActivtyAndSetting(private val _repo: RepositoryInterface): Vi
     fun readFloatFromSharedPreferences(dataNeed: String):Float{
         return _repo.readFloatFromSharedPreferences(dataNeed)
     }
+    fun readStringFromSharedPreferences(dataNeed: String):String{
+        return _repo.readStringFromSharedPreferences(dataNeed)
+    }
 
 }

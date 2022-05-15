@@ -27,16 +27,19 @@ import com.example.weatherforecast.repo.Repository
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
 import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFactory
 import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var binding: ActivityMapsBinding
     private lateinit var mapSearchEdittext: EditText
+    private lateinit var googleMap: GoogleMap
 
     private lateinit var viewModel: ViewModelMainActivtyAndSetting
     private lateinit var viewModelFactory: ViewModelMainActivtyAndSettingFactory
     companion object{
-      const val DEFAULT_ZOOM = 8f
+      const val DEFAULT_ZOOM = 10f
 
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +79,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     private fun geoLocate(){
         val textSearch = mapSearchEdittext.text.toString()
-        val geocoder = Geocoder(this)
+        val geocoder = Geocoder(this, Locale(getAppLangauge()))
         var list = ArrayList<Address>()
         try {
              list = geocoder.getFromLocationName(textSearch,1) as ArrayList<Address>
@@ -86,6 +89,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (list.size > 0){
             var address = list[0]
             Log.e("TAG", "geolocate: address: $address" )
+            moveCamera(address.latitude, address.longitude)
+            addMarker(address.latitude, address.longitude, address.adminArea)
         }
 
     }
@@ -97,13 +102,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         return viewModel.readFloatFromSharedPreferences(SharedPrefrencesKeys.latitude)
     }
-    fun moveCamera(googleMap: GoogleMap){
-        val currentLocation = LatLng(getLatitude().toDouble(), getLongitude().toDouble())
+    fun moveCamera(latitude:Double,longitude:Double){
+        val currentLocation = LatLng(latitude, longitude)
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,DEFAULT_ZOOM))
     }
-    fun addMarker(googleMap: GoogleMap){
-        val currentLocation = LatLng(getLatitude().toDouble(), getLongitude().toDouble())
-        googleMap.addMarker(MarkerOptions().position(currentLocation))
+    fun addMarker(latitude:Double, longitude:Double, title:String){
+        val currentLocation = LatLng(latitude, longitude)
+        googleMap.addMarker(MarkerOptions().position(currentLocation).title(title))
+
+
     }
 
     fun addMyCurrentLocation(googleMap: GoogleMap){
@@ -123,19 +130,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         googleMap.isMyLocationEnabled = true
     }
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+
     override fun onMapReady(googleMap: GoogleMap) {
-        moveCamera(googleMap)
-        addMarker(googleMap)
+        this.googleMap = googleMap
+        moveCamera(getLatitude().toDouble(), getLongitude().toDouble())
+        addMarker(getLatitude().toDouble(), getLongitude().toDouble(), "")
      //   addMyCurrentLocation(googleMap)
 
+    }
+    private fun getAppLangauge():String{
+        return viewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language)
     }
 }
