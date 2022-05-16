@@ -94,6 +94,12 @@ class HomeScreenFragment : Fragment() {
 
     }
     fun getWeatherView(view:View){
+        viewModel.flagAPIFinishedDorNot.observe(viewLifecycleOwner, Observer {
+            if (it == false)
+                progressBar.visibility = View.VISIBLE
+            else
+                progressBar.visibility = View.GONE
+        })
         viewModel.observeOnSharedPref(view.context)
         viewModel.weatherData.observe(viewLifecycleOwner, Observer {
             viewModel.addWeatherModelInRoom(it)
@@ -153,7 +159,7 @@ class HomeScreenFragment : Fragment() {
     private fun setSwipeListener(view: View){
         swipe.setOnRefreshListener{
            getWeatherView(view)
-            Handler().postDelayed({ // Stop animation (This will be after 3 seconds)
+            Handler().postDelayed({ // Stop animation
                 swipe.setRefreshing(false)
             }, 7000) // Delay in millis
 
@@ -191,7 +197,7 @@ class HomeScreenFragment : Fragment() {
         hourlyWeathersAdapter.setHours(weather.hourly)
         showView()
     }
-    fun hideView(){
+    private fun hideView(){
         progressBar.visibility = View.VISIBLE
         city.visibility = View.GONE
         date.visibility = View.GONE
@@ -201,7 +207,7 @@ class HomeScreenFragment : Fragment() {
         hourlyForTheCurrentDate.visibility = View.GONE
         daysForTheCurrentDate.visibility = View.GONE
     }
-    fun showView(){
+     private fun showView(){
         progressBar.visibility = View.GONE
         city.visibility = View.VISIBLE
         date.visibility = View.VISIBLE

@@ -1,8 +1,8 @@
 package com.example.weatherforecast.repo
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
+import com.example.weatherforecast.Model.FavouriteModel
 import com.example.weatherforecast.Model.SharedPrefrencesDataClass
 import com.example.weatherforecast.Model.WeatherModel
 import retrofit2.Response
@@ -23,4 +23,8 @@ interface RepositoryInterface {
     fun insertWeatherModel(weatherModel: WeatherModel)
     fun getCurrentLocation()
     fun deleteWeatherModel(weatherModel: WeatherModel)
+
+    val allStoredFavouriteModel: LiveData<List<FavouriteModel>>
+    fun insertFavouriateModel(favouriteModel:FavouriteModel)
+    fun deleteFavouriateModel(favouriteModel: FavouriteModel)
 }

@@ -17,8 +17,10 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
     private var _weatherData = MutableLiveData<WeatherModel>()
     private var _errorMsgResponse = MutableLiveData<String>()
+    private var _flagAPIFinishedDorNot = MutableLiveData<Boolean>()
     val weatherData:LiveData<WeatherModel> = _weatherData
     val errorMsgResponse:LiveData<String> = _errorMsgResponse
+    val flagAPIFinishedDorNot:LiveData<Boolean> = _flagAPIFinishedDorNot
     private lateinit var preferences:SharedPreferences
     private lateinit var listener:SharedPreferences.OnSharedPreferenceChangeListener
     private val coroutineExceptionHandler = CoroutineExceptionHandler{ _, t ->
@@ -29,10 +31,12 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
         }
     }
     private fun getCurrentWeatherFromNetwork(context:Context) {
+        _flagAPIFinishedDorNot.postValue(false)
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             val currentWeatherResponse = _repo.getCurrentWeatherOverNetwork()
             if (currentWeatherResponse.isSuccessful) {
                 _weatherData.postValue(currentWeatherResponse.body())
+                _flagAPIFinishedDorNot.postValue(true)
             }
         }
     }

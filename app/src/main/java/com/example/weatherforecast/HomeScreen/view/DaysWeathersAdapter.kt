@@ -13,7 +13,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class DaysWeathersAdapter (private var context: Context, private var days: List<Daily>,private val language:String,private val tempUnit:String):
     RecyclerView.Adapter<DaysWeathersAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaysWeathersAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.day_row_for_weather,parent,false)
         return ViewHolder(view)
@@ -21,7 +21,7 @@ class DaysWeathersAdapter (private var context: Context, private var days: List<
 
 
 
-    override fun onBindViewHolder(holder: DaysWeathersAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder:ViewHolder, position: Int) {
 
         if(days.isNotEmpty()){
             val day = days[position+1]

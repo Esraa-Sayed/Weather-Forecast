@@ -1,7 +1,5 @@
 package com.example.weatherforecast.Map.view
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +8,6 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
 import com.example.weatherforecast.R
@@ -30,6 +27,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 import androidx.appcompat.app.AlertDialog
 import com.example.weatherforecast.Constants.IntentKeys
+import com.example.weatherforecast.Model.FavouriteModel
+import com.example.weatherforecast.db.ConcreteLocalSource
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -60,7 +59,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
-            Repository.getInstance(null, null,this)
+            Repository.getInstance(null, ConcreteLocalSource(this),this)
         )
         viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
         mapSearchEdittext = binding.mapSearchEdittext
@@ -122,10 +121,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         moveCamera(getLatitude().toDouble(), getLongitude().toDouble())
         addMarker(getLatitude().toDouble(), getLongitude().toDouble(), "")
         googleMap.setOnMapClickListener {
-            addMarker(it.latitude, it.longitude, "new")
+            addMarker(it.latitude, it.longitude, getFullAddress(it.latitude,it.longitude,viewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language)))
             showConfirmDialog(it)
         }
-     //   addMyCurrentLocation(googleMap)
 
     }
     private fun getAppLangauge():String{
@@ -134,12 +132,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun showConfirmDialog(latLng: LatLng) {
         val builder: AlertDialog.Builder =  AlertDialog.Builder(this)
         builder.setCancelable(true)
-        builder.setTitle(getString(R.string.confirmation_message))
-        builder.setMessage(getString(R.string.are_You_Sure))
+        builder.setTitle(getString( R.string.are_You_Sure))
+        builder.setMessage(getFullAddress(latLng.latitude,latLng.longitude,viewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language)))
         builder.setPositiveButton(getString(R.string.Confirm)) { dialog, which ->
             if ( whoOpenMapActivity() == IntentKeys.SETTING_ACTIVITY){
                 Log.e("TAG", "geolocate: addressYYYYYYYYYYES" )
                 saveLocationOnSharedPrefrences(latLng)
+                finish()
+            }
+            else if(whoOpenMapActivity() == IntentKeys.FAV_ACTIVITY){
+                addPlaceInRoom(latLng)
                 finish()
             }
         }
@@ -149,6 +151,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()
     }
+
+    private fun addPlaceInRoom(latLng: LatLng) {
+        val latitude = latLng.latitude
+        val longitude = latLng.longitude
+        val addressAr = getFullAddress(latitude,longitude,"ar")
+        val addressEn = getFullAddress(latitude,longitude,"en")
+        val favouriateModel = FavouriteModel(latitude,longitude, addressAr, addressEn)
+        viewModel.insertFavouriatePlace(favouriateModel)
+    }
+
+    private fun getFullAddress(latitude: Double, longitude: Double, language: String): String{
+          var geocoder = Geocoder(this, Locale(language))
+          val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+          var allAddress = "Unknown"
+          if (!addresses.isNullOrEmpty()){
+              var city = addresses[0].adminArea
+              var country = addresses[0].countryName
+              allAddress = "$city,$country"
+          }
+        return allAddress
+    }
+
     private fun whoOpenMapActivity():String{
         return intent.getStringExtra(IntentKeys.COME_FROM).toString()
     }

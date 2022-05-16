@@ -2,9 +2,13 @@ package com.example.weatherforecast.viewModel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
+import com.example.weatherforecast.Model.FavouriteModel
 import com.example.weatherforecast.repo.RepositoryInterface
 import com.example.weatherforecast.Model.SharedPrefrencesDataClass
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ViewModelMainActivtyAndSetting(private val _repo: RepositoryInterface): ViewModel() {
     fun setDataToSharedPrefInFirstTime(context: Context){
@@ -32,6 +36,9 @@ class ViewModelMainActivtyAndSetting(private val _repo: RepositoryInterface): Vi
     }
     fun readStringFromSharedPreferences(dataNeed: String):String{
         return _repo.readStringFromSharedPreferences(dataNeed)
+    }
+    fun insertFavouriatePlace(favouriteModel: FavouriteModel){
+        viewModelScope.launch(Dispatchers.IO) { _repo.insertFavouriateModel(favouriteModel)}
     }
 
 }

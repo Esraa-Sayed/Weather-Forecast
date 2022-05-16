@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys.getCityNameFromLatAndLong
+import com.example.weatherforecast.Model.FavouriteModel
 import com.example.weatherforecast.Model.SharedPrefrencesDataClass
 import com.example.weatherforecast.Model.WeatherModel
 import com.example.weatherforecast.Network.RemoteSource
@@ -103,7 +104,7 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
         locationRequest = LocationRequest.create().apply {
             interval = 10000
             fastestInterval = 5000
-            priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             maxWaitTime = 5000
         }
         //setUplocationCallback
@@ -179,5 +180,15 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
 
     override fun deleteWeatherModel(weatherModel: WeatherModel) {
         localSource!!.deleteWeatherModel(weatherModel)
+    }
+
+    override val allStoredFavouriteModel: LiveData<List<FavouriteModel>>
+        get() = localSource!!.allStoredFavouriteModel
+
+    override fun insertFavouriateModel(favouriteModel: FavouriteModel){
+        localSource!!.insertFavouriateModel(favouriteModel)
+    }
+    override fun deleteFavouriateModel(favouriteModel: FavouriteModel){
+        localSource!!.deleteFavouriateModelmovie(favouriteModel)
     }
 }

@@ -22,4 +22,11 @@
     <style name="Theme.WeatherForecast.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.WeatherForecast.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="MyMaterialTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Add attributes here -->
+        <item name="colorPrimary">#5E35B1</item>
+        <item name="colorPrimaryDark">#2196F3</item>
+        <item name="colorAccent">#2196F3</item>
+        <item name="colorOnSecondary">#2196F3</item>
+    </style>
 </resources>
