@@ -2,8 +2,11 @@ package com.example.weatherforecast.Constants
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Geocoder
+import android.util.Log
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,5 +25,20 @@ object APIRequest {
             .with(context)
             .load("$IMG_URL${iconURL}@4x.png")
             .into(imgViewCurrentWeatherIcon)
+    }
+    fun getFullAddress(latitude: Double, longitude: Double, language: String,context: Context): String{
+        var geocoder = Geocoder(context, Locale(language))
+        var allAddress = "Unknown"
+        try{
+            val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+            if (!addresses.isNullOrEmpty()){
+                var city = addresses[0].adminArea
+                var country = addresses[0].countryName
+                allAddress = "$city,$country"
+            }
+        }catch (e: IOException){
+            Log.e("TAG", "getFullAddress: ${e.message}" )
+        }
+        return allAddress
     }
 }

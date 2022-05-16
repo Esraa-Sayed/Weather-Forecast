@@ -1,6 +1,7 @@
 package com.example.weatherforecast.viewModel
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
@@ -41,6 +42,9 @@ class ViewModelMainActivtyAndSetting(private val _repo: RepositoryInterface): Vi
         viewModelScope.launch(Dispatchers.IO) {
             _repo.insertFavouriateModel(favouriteModel)
         }
+    }
+    fun getLocalFavouriate(): LiveData<List<FavouriteModel>> {
+        return _repo.allStoredFavouriteModel
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.weatherforecast.Map.view
 
+import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +27,9 @@ import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 import androidx.appcompat.app.AlertDialog
+import com.example.weatherforecast.Constants.APIRequest.getFullAddress
 import com.example.weatherforecast.Constants.IntentKeys
+import com.example.weatherforecast.Constants.IntentKeys.REPLY_INTENT_KEY
 import com.example.weatherforecast.Model.FavouriteModel
 import com.example.weatherforecast.db.ConcreteLocalSource
 
@@ -121,7 +124,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         moveCamera(getLatitude().toDouble(), getLongitude().toDouble())
         addMarker(getLatitude().toDouble(), getLongitude().toDouble(), "")
         googleMap.setOnMapClickListener {
-            addMarker(it.latitude, it.longitude, getFullAddress(it.latitude,it.longitude,viewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language)))
+            addMarker(it.latitude, it.longitude, getFullAddress(it.latitude,it.longitude,viewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language),this))
             showConfirmDialog(it)
         }
 
@@ -133,7 +136,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val builder: AlertDialog.Builder =  AlertDialog.Builder(this)
         builder.setCancelable(true)
         builder.setTitle(getString( R.string.are_You_Sure))
-        builder.setMessage(getFullAddress(latLng.latitude,latLng.longitude,viewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language)))
+        builder.setMessage(getFullAddress(latLng.latitude,latLng.longitude,viewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language),this))
         builder.setPositiveButton(getString(R.string.Confirm)) { dialog, which ->
             if ( whoOpenMapActivity() == IntentKeys.SETTING_ACTIVITY){
                 Log.e("TAG", "geolocate: addressYYYYYYYYYYES" )
@@ -141,7 +144,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 finish()
             }
             else if(whoOpenMapActivity() == IntentKeys.FAV_ACTIVITY){
-                addPlaceInRoom(latLng)
+                val replyIntent = Intent()
+                replyIntent.putExtra(REPLY_INTENT_KEY, latLng)
+                setResult(RESULT_OK, replyIntent)
                 finish()
             }
         }
@@ -150,27 +155,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val dialog: AlertDialog = builder.create()
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()
-    }
-
-    private fun addPlaceInRoom(latLng: LatLng) {
-        val latitude = latLng.latitude
-        val longitude = latLng.longitude
-        val addressAr = getFullAddress(latitude,longitude,"ar")
-        val addressEn = getFullAddress(latitude,longitude,"en")
-        val favouriateModel = FavouriteModel(latitude,longitude, addressAr, addressEn)
-        viewModel.insertFavouriatePlace(favouriateModel)
-    }
-
-    private fun getFullAddress(latitude: Double, longitude: Double, language: String): String{
-          var geocoder = Geocoder(this, Locale(language))
-          val addresses = geocoder.getFromLocation(latitude, longitude, 1)
-          var allAddress = "Unknown"
-          if (!addresses.isNullOrEmpty()){
-              var city = addresses[0].adminArea
-              var country = addresses[0].countryName
-              allAddress = "$city,$country"
-          }
-        return allAddress
     }
 
     private fun whoOpenMapActivity():String{
