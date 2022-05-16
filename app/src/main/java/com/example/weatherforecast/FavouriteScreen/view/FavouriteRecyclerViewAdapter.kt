@@ -5,12 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.Model.FavouriteModel
 import com.example.weatherforecast.R
 
-class FavouriteRecyclerViewAdapter(private var context: Context, private var favPlaces:List<FavouriteModel>, private val language:String):RecyclerView.Adapter<FavouriteRecyclerViewAdapter.ViewHolder>() {
+class FavouriteRecyclerViewAdapter(private var context: Context,private var onItemClickListener: OnItemClickListener, private var favPlaces:List<FavouriteModel>, private val language:String):RecyclerView.Adapter<FavouriteRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.favouriate_row,parent,false)
@@ -18,7 +19,6 @@ class FavouriteRecyclerViewAdapter(private var context: Context, private var fav
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (favPlaces.size-1 >= position){
             if ( language =="en")
                  holder.textCityName.text = favPlaces[position].addressEn
             else
@@ -26,7 +26,10 @@ class FavouriteRecyclerViewAdapter(private var context: Context, private var fav
             holder.itemView.setOnClickListener {
                 Log.e("TAG", "onBindViewHolder: Clicked***********" )
             }
-        }
+            holder.deleteThisRow.setOnClickListener {
+                Log.e("TAG", "onBindViewHolder: OnClicked***********" )
+                onItemClickListener.onDeleteIconClicked(favPlaces[position])
+            }
 
     }
     fun newData(favPlaces:List<FavouriteModel>){
@@ -38,5 +41,6 @@ class FavouriteRecyclerViewAdapter(private var context: Context, private var fav
     }
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var textCityName:TextView = itemView.findViewById(R.id.textCityFavName)
+        var deleteThisRow:ImageButton = itemView.findViewById(R.id.deleteThisRow)
     }
 }

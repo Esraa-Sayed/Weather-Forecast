@@ -19,15 +19,14 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.weatherforecast.repo.Repository
 import com.example.weatherforecast.Setting.view.SettingActivity
-import com.example.weatherforecast.db.ConcreteLocalSource
-import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
-import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFactory
+import com.example.weatherforecast.viewModel.MainSettingFavouriteViewModel
+import com.example.weatherforecast.viewModel.MainSettingFavouriteViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView;
-    lateinit var viewModel: ViewModelMainActivtyAndSetting
-    lateinit var viewModelFactory: ViewModelMainActivtyAndSettingFactory
+    lateinit var favouriteViewModel: MainSettingFavouriteViewModel
+    lateinit var favouriteViewModelFactory: MainSettingFavouriteViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         var locationManager:LocationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            viewModel.setDataToSharedPrefInFirstTime(this)
+            favouriteViewModel.setDataToSharedPrefInFirstTime(this)
         }
         else {
             //when location servies is not enabled
@@ -100,10 +99,10 @@ class MainActivity : AppCompatActivity() {
         setTitle(R.string.app_name);
         bottomNavigationView = findViewById(R.id.bottomnavigation)
         val navController2 = findNavController(this, R.id.nav_host_fragment_activity_main)
-        viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
+        favouriteViewModelFactory =  MainSettingFavouriteViewModelFactory(
             Repository.getInstance(null, null,this)
         )
-        viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
+        favouriteViewModel = ViewModelProvider(this, favouriteViewModelFactory)[MainSettingFavouriteViewModel::class.java]
         setupWithNavController(bottomNavigationView, navController2)
 
     }

@@ -31,7 +31,7 @@ class ConcreteLocalSource(context: Context) : LocalSource {
     }
 
     override fun deleteFavouriateModelmovie(favouriteModel: FavouriteModel){
-        favouriteDAO?.insertFavouriteModel(favouriteModel)
+        favouriteDAO?.deleteFavouriteModel(favouriteModel)
     }
 
 }

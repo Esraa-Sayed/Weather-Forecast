@@ -11,7 +11,7 @@ import com.example.weatherforecast.Model.SharedPrefrencesDataClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ViewModelMainActivtyAndSetting(private val _repo: RepositoryInterface): ViewModel() {
+class MainSettingFavouriteViewModel(private val _repo: RepositoryInterface): ViewModel() {
     fun setDataToSharedPrefInFirstTime(context: Context){
       if(!_repo.readBooleanFromSharedPreferences(SharedPrefrencesKeys.isNotFirstTime))
           _repo.writeSettingDataInPreferencesForFirstTime()
@@ -45,6 +45,11 @@ class ViewModelMainActivtyAndSetting(private val _repo: RepositoryInterface): Vi
     }
     fun getLocalFavouriate(): LiveData<List<FavouriteModel>> {
         return _repo.allStoredFavouriteModel
+    }
+    fun deleteFavouriateModel(favouriteModel: FavouriteModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _repo.deleteFavouriateModel(favouriteModel)
+        }
     }
 
 }

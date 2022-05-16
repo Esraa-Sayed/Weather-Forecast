@@ -15,14 +15,13 @@ import com.example.weatherforecast.Map.view.MapsActivity
 import com.example.weatherforecast.repo.Repository
 
 import com.example.weatherforecast.R
-import com.example.weatherforecast.db.ConcreteLocalSource
-import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
-import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFactory
+import com.example.weatherforecast.viewModel.MainSettingFavouriteViewModel
+import com.example.weatherforecast.viewModel.MainSettingFavouriteViewModelFactory
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingActivity : AppCompatActivity() {
-    private lateinit var viewModel: ViewModelMainActivtyAndSetting
-    private lateinit var viewModelFactory: ViewModelMainActivtyAndSettingFactory
+    private lateinit var favouriteViewModel: MainSettingFavouriteViewModel
+    private lateinit var favouriteViewModelFactory: MainSettingFavouriteViewModelFactory
     private lateinit var notification: SwitchMaterial
     private lateinit var location:RadioGroup
     private lateinit var windSpeed:RadioGroup
@@ -47,10 +46,10 @@ class SettingActivity : AppCompatActivity() {
         temperature = findViewById(R.id.temperature)
         language = findViewById(R.id.language)
         mapRadioButton = findViewById(R.id.mapRadioButton)
-        viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
+        favouriteViewModelFactory =  MainSettingFavouriteViewModelFactory(
             Repository.getInstance(null, null,this)
         )
-        viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
+        favouriteViewModel = ViewModelProvider(this, favouriteViewModelFactory)[MainSettingFavouriteViewModel::class.java]
 
 
         addRadioGroupListener()
@@ -60,9 +59,9 @@ class SettingActivity : AppCompatActivity() {
     private fun addNotificationLisetener(){
         notification.setOnCheckedChangeListener{_, isChecked ->
             if (isChecked) {
-                viewModel.changeSettingBoolean(SharedPrefrencesKeys.notification,isChecked)
+                favouriteViewModel.changeSettingBoolean(SharedPrefrencesKeys.notification,isChecked)
             } else {
-                viewModel.changeSettingBoolean(SharedPrefrencesKeys.notification,false)
+                favouriteViewModel.changeSettingBoolean(SharedPrefrencesKeys.notification,false)
             }
         }
     }
@@ -70,7 +69,7 @@ class SettingActivity : AppCompatActivity() {
 
        mapRadioButton.setOnClickListener {
            openMap()
-           viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState, mapRadioButton.getText().toString())
+           favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.locationState, mapRadioButton.getText().toString())
        }
         location.setOnCheckedChangeListener{radioGroup, checkedId ->
             if (!flagOnClickListenerBecauseConfig){
@@ -78,8 +77,8 @@ class SettingActivity : AppCompatActivity() {
                  locationText = radioButton.getText().toString()
                 if(locationText == getString(R.string.gps))
                 {
-                    viewModel.getLocationAndSaveItInSharedPref()
-                    viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,locationText)
+                    favouriteViewModel.getLocationAndSaveItInSharedPref()
+                    favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,locationText)
                 }
 
             }
@@ -88,14 +87,14 @@ class SettingActivity : AppCompatActivity() {
             if (!flagOnClickListenerBecauseConfig) {
                 radioButton = findViewById(checkedId)
                 windSpeedText = radioButton.getText().toString()
-                viewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed, windSpeedText)
+                favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed, windSpeedText)
           }
         }
         temperature.setOnCheckedChangeListener{_,checkedId->
             if (!flagOnClickListenerBecauseConfig){
                 radioButton = findViewById(checkedId)
                 temperatureText = radioButton.getText().toString()
-                viewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,temperatureText)
+                favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,temperatureText)
             }
         }
         language.setOnCheckedChangeListener{_,checkedId->
@@ -112,7 +111,7 @@ class SettingActivity : AppCompatActivity() {
                 }
                 finish();
                 startActivity(intent);
-                viewModel.changeSettingStrings(SharedPrefrencesKeys.language,languageText)
+                favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.language,languageText)
                 Log.e("Tag", "addRadioGroupListener: ${languageText}" )
             }
         }
@@ -123,7 +122,7 @@ class SettingActivity : AppCompatActivity() {
         startActivity(intent)
     }
    private fun setConfigrationData(){
-        var data  = viewModel.getDataFromSharedPrefrences()
+        var data  = favouriteViewModel.getDataFromSharedPrefrences()
         setLocationState(data.locationState)
         setWindSpeed(data.windSpeed)
         setTemperature(data.temperature)
@@ -179,9 +178,9 @@ class SettingActivity : AppCompatActivity() {
     private fun setNotification(notificationState: Boolean){
         notification.isChecked = notificationState
         //to use it when change language
-        viewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,getTextOnCheckedRadioButton(temperature))
-        viewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed,getTextOnCheckedRadioButton(windSpeed))
-        viewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,getTextOnCheckedRadioButton(location))
+        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,getTextOnCheckedRadioButton(temperature))
+        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed,getTextOnCheckedRadioButton(windSpeed))
+        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,getTextOnCheckedRadioButton(location))
     }
     private fun getTextOnCheckedRadioButton(radioButtonGroup:RadioGroup):String{
         val radioButtonID = radioButtonGroup.checkedRadioButtonId

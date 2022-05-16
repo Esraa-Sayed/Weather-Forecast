@@ -104,7 +104,7 @@ dependencies {
     //lottie_version
     def lottie_version = "5.0.3" // 3.7.2
     implementation "com.airbnb.android:lottie:$lottie_version"
-//image view circle
+    //image view circle
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     //Google places
     implementation 'com.google.android.libraries.places:places:2.6.0'

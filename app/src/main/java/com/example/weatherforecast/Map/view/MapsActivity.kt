@@ -21,8 +21,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.weatherforecast.databinding.ActivityMapsBinding
 import com.example.weatherforecast.repo.Repository
-import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
-import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFactory
+import com.example.weatherforecast.viewModel.MainSettingFavouriteViewModel
+import com.example.weatherforecast.viewModel.MainSettingFavouriteViewModelFactory
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -30,7 +30,6 @@ import androidx.appcompat.app.AlertDialog
 import com.example.weatherforecast.Constants.APIRequest.getFullAddress
 import com.example.weatherforecast.Constants.IntentKeys
 import com.example.weatherforecast.Constants.IntentKeys.REPLY_INTENT_KEY
-import com.example.weatherforecast.Model.FavouriteModel
 import com.example.weatherforecast.db.ConcreteLocalSource
 
 
@@ -40,8 +39,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mapSearchEdittext: EditText
     private lateinit var googleMap: GoogleMap
 
-    private lateinit var viewModel: ViewModelMainActivtyAndSetting
-    private lateinit var viewModelFactory: ViewModelMainActivtyAndSettingFactory
+    private lateinit var favouriteViewModel: MainSettingFavouriteViewModel
+    private lateinit var favouriteViewModelFactory: MainSettingFavouriteViewModelFactory
     companion object{
       const val DEFAULT_ZOOM = 5f
 
@@ -61,10 +60,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        viewModelFactory =  ViewModelMainActivtyAndSettingFactory(
+        favouriteViewModelFactory =  MainSettingFavouriteViewModelFactory(
             Repository.getInstance(null, ConcreteLocalSource(this),this)
         )
-        viewModel = ViewModelProvider(this, viewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
+        favouriteViewModel = ViewModelProvider(this, favouriteViewModelFactory)[MainSettingFavouriteViewModel::class.java]
         mapSearchEdittext = binding.mapSearchEdittext
         initSearch()
 
@@ -101,11 +100,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     private fun getLongitude():Float{
 
-        return viewModel.readFloatFromSharedPreferences(SharedPrefrencesKeys.longitude)
+        return favouriteViewModel.readFloatFromSharedPreferences(SharedPrefrencesKeys.longitude)
     }
     private fun getLatitude():Float{
 
-        return viewModel.readFloatFromSharedPreferences(SharedPrefrencesKeys.latitude)
+        return favouriteViewModel.readFloatFromSharedPreferences(SharedPrefrencesKeys.latitude)
     }
     fun moveCamera(latitude:Double,longitude:Double){
         val currentLocation = LatLng(latitude, longitude)
@@ -124,19 +123,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         moveCamera(getLatitude().toDouble(), getLongitude().toDouble())
         addMarker(getLatitude().toDouble(), getLongitude().toDouble(), "")
         googleMap.setOnMapClickListener {
-            addMarker(it.latitude, it.longitude, getFullAddress(it.latitude,it.longitude,viewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language),this))
+            addMarker(it.latitude, it.longitude, getFullAddress(it.latitude,it.longitude,favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language),this))
             showConfirmDialog(it)
         }
 
     }
     private fun getAppLangauge():String{
-        return viewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+        return favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language)
     }
     private fun showConfirmDialog(latLng: LatLng) {
         val builder: AlertDialog.Builder =  AlertDialog.Builder(this)
         builder.setCancelable(true)
         builder.setTitle(getString( R.string.are_You_Sure))
-        builder.setMessage(getFullAddress(latLng.latitude,latLng.longitude,viewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language),this))
+        builder.setMessage(getFullAddress(latLng.latitude,latLng.longitude,favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language),this))
         builder.setPositiveButton(getString(R.string.Confirm)) { dialog, which ->
             if ( whoOpenMapActivity() == IntentKeys.SETTING_ACTIVITY){
                 Log.e("TAG", "geolocate: addressYYYYYYYYYYES" )
@@ -161,11 +160,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return intent.getStringExtra(IntentKeys.COME_FROM).toString()
     }
     private fun saveLocationOnSharedPrefrences(latLng: LatLng){
-        viewModel.changeSettingFloat(SharedPrefrencesKeys.latitude, latLng.latitude.toFloat())
-        viewModel.changeSettingFloat(SharedPrefrencesKeys.latitude, latLng.longitude.toFloat())
+        favouriteViewModel.changeSettingFloat(SharedPrefrencesKeys.latitude, latLng.latitude.toFloat())
+        favouriteViewModel.changeSettingFloat(SharedPrefrencesKeys.latitude, latLng.longitude.toFloat())
         val cityNameAr = SharedPrefrencesKeys.getCityNameFromLatAndLong(this,"ar", latLng.latitude,latLng.longitude)
         val cityNameEn = SharedPrefrencesKeys.getCityNameFromLatAndLong(this,"en", latLng.latitude,latLng.longitude)
-        viewModel.changeSettingStrings(SharedPrefrencesKeys.cityArabic,cityNameAr)
-        viewModel.changeSettingStrings(SharedPrefrencesKeys.cityEnglish,cityNameEn)
+        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.cityArabic,cityNameAr)
+        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.cityEnglish,cityNameEn)
     }
 }

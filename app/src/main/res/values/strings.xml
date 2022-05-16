@@ -39,7 +39,8 @@
     <string name="No_internet_connection">No internet connection</string>
     <string name="enter_address_city_or_zip_code">Enter Address, City or Zip Code</string>
     <string name="confirmation_message">Confirmation message</string>
-    <string name="are_You_Sure">Are you sure</string>
+    <string name="are_You_Sure">Are you sure?</string>
+    <string name="You_want_to_delete_this_palce">you want to delete this place</string>
     <string name="Confirm">Confirm</string>
     <string name="Cancle">Cancle</string>
     <string name="Unknown_city">Unknown city</string>

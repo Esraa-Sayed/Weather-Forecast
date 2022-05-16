@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,18 +24,18 @@ import com.example.weatherforecast.Network.WeatherClient
 import com.example.weatherforecast.R
 import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.repo.Repository
-import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSetting
-import com.example.weatherforecast.viewModel.ViewModelMainActivtyAndSettingFactory
+import com.example.weatherforecast.viewModel.MainSettingFavouriteViewModel
+import com.example.weatherforecast.viewModel.MainSettingFavouriteViewModelFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class FavouriteFragment : Fragment() {
+class FavouriteFragment : Fragment(),OnItemClickListener {
     private  lateinit var favouriatePlaces: RecyclerView
     private  lateinit var favouritePlacesAdapter: FavouriteRecyclerViewAdapter
     private  lateinit var addFavFloatingActionButton: FloatingActionButton
 
-    private lateinit var favouriteViewModelFactory:ViewModelMainActivtyAndSettingFactory
-    private lateinit var favouriteViewModel: ViewModelMainActivtyAndSetting
+    private lateinit var favouriteFavouriteViewModelFactory:MainSettingFavouriteViewModelFactory
+    private lateinit var favouriteFavouriteViewModel: MainSettingFavouriteViewModel
     private lateinit var myView: View
 
 
@@ -57,14 +58,14 @@ class FavouriteFragment : Fragment() {
     }
     private fun init(view: View) {
 
-        favouriteViewModelFactory = ViewModelMainActivtyAndSettingFactory(
+        favouriteFavouriteViewModelFactory = MainSettingFavouriteViewModelFactory(
             Repository.getInstance(
                 WeatherClient.getInstance(), ConcreteLocalSource(view.context),view.context))
-        favouriteViewModel = ViewModelProvider(this,favouriteViewModelFactory)[ViewModelMainActivtyAndSetting::class.java]
+        favouriteFavouriteViewModel = ViewModelProvider(this,favouriteFavouriteViewModelFactory)[MainSettingFavouriteViewModel::class.java]
 
 
         favouriatePlaces = view.findViewById(R.id.favRecyclerView)
-        favouritePlacesAdapter = FavouriteRecyclerViewAdapter(view.context, emptyList(),favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language))
+        favouritePlacesAdapter = FavouriteRecyclerViewAdapter(view.context,this, emptyList(),favouriteFavouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language))
         var layoutMan = LinearLayoutManager(activity)
         favouriatePlaces.apply {
             setHasFixedSize(true)
@@ -76,15 +77,13 @@ class FavouriteFragment : Fragment() {
         addFavFloatingActionButton = view.findViewById(R.id.addFavFloatingActionButton)
         addListenerTOFloatingActionButton()
 
-        favouriteViewModel.getLocalFavouriate().observe(viewLifecycleOwner, Observer {
+        favouriteFavouriteViewModel.getLocalFavouriate().observe(viewLifecycleOwner, Observer {
             sendDataToAdapter(it)
         })
     }
 
     private fun sendDataToAdapter(places: List<FavouriteModel>) {
-        if(!places.isNullOrEmpty()){
             favouritePlacesAdapter.newData(places)
-        }
     }
 
     private fun addListenerTOFloatingActionButton(){
@@ -112,13 +111,39 @@ class FavouriteFragment : Fragment() {
         val addressAr = getFullAddress(latitude,longitude,"ar",myView.context)
         val addressEn = getFullAddress(latitude,longitude,"en",myView.context)
         val favouriateModel = FavouriteModel(latitude,longitude, addressAr, addressEn)
-        favouriteViewModel.insertFavouriatePlace(favouriateModel)
+        favouriteFavouriteViewModel.insertFavouriatePlace(favouriateModel)
     }
 
     override fun onStart() {
         super.onStart()
-        favouriteViewModel.getLocalFavouriate().observe(viewLifecycleOwner, Observer {
+        favouriteFavouriteViewModel.getLocalFavouriate().observe(viewLifecycleOwner, Observer {
             sendDataToAdapter(it)
         })
+    }
+
+    override fun onRowClicked(favouriteModel: FavouriteModel) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDeleteIconClicked(favouriteModel: FavouriteModel) {
+        showConfirmDialog(favouriteModel)
+    }
+    private fun showConfirmDialog(favouriteModel: FavouriteModel) {
+        val builder: AlertDialog.Builder =  AlertDialog.Builder(myView.context)
+        builder.setCancelable(true)
+        builder.setTitle(getString( R.string.are_You_Sure))
+        builder.setMessage(getString(R.string.You_want_to_delete_this_palce))
+        builder.setPositiveButton(getString(R.string.Confirm)) { _, _ ->
+                deleteThisRowFromRoom(favouriteModel)
+        }
+        builder.setNegativeButton(android.R.string.cancel){ _, _ -> }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+    }
+
+    private fun deleteThisRowFromRoom(favouriteModel: FavouriteModel) {
+            favouriteFavouriteViewModel.deleteFavouriateModel(favouriteModel)
     }
 }
