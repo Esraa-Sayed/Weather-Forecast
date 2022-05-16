@@ -38,7 +38,9 @@ class ViewModelMainActivtyAndSetting(private val _repo: RepositoryInterface): Vi
         return _repo.readStringFromSharedPreferences(dataNeed)
     }
     fun insertFavouriatePlace(favouriteModel: FavouriteModel){
-        viewModelScope.launch(Dispatchers.IO) { _repo.insertFavouriateModel(favouriteModel)}
+        viewModelScope.launch(Dispatchers.IO) {
+            _repo.insertFavouriateModel(favouriteModel)
+        }
     }
 
 }

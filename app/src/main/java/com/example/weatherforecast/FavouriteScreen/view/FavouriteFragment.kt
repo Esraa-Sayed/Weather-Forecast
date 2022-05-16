@@ -86,5 +86,8 @@ class FavouriteFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        favouriteViewModel.getLocalFavouriate().observe(viewLifecycleOwner, Observer {
+            sendDataToAdapter(it)
+        })
     }
 }
