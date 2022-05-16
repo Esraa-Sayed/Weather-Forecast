@@ -24,13 +24,11 @@ class FavouriteRecyclerViewAdapter(private var context: Context,private var onIt
             else
                 holder.textCityName.text = favPlaces[position].addressAr
             holder.itemView.setOnClickListener {
-                Log.e("TAG", "onBindViewHolder: Clicked***********" )
+               onItemClickListener.onRowClicked(favPlaces[position])
             }
             holder.deleteThisRow.setOnClickListener {
-                Log.e("TAG", "onBindViewHolder: OnClicked***********" )
                 onItemClickListener.onDeleteIconClicked(favPlaces[position])
             }
-
     }
     fun newData(favPlaces:List<FavouriteModel>){
         this.favPlaces = favPlaces

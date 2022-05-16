@@ -22,6 +22,7 @@ import com.example.weatherforecast.Map.view.MapsActivity
 import com.example.weatherforecast.Model.FavouriteModel
 import com.example.weatherforecast.Network.WeatherClient
 import com.example.weatherforecast.R
+import com.example.weatherforecast.ShowFavPlaceDetails.view.ShowFavPlaceDetails
 import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.repo.Repository
 import com.example.weatherforecast.viewModel.MainSettingFavouriteViewModel
@@ -122,7 +123,9 @@ class FavouriteFragment : Fragment(),OnItemClickListener {
     }
 
     override fun onRowClicked(favouriteModel: FavouriteModel) {
-        TODO("Not yet implemented")
+       val intent = Intent(activity, ShowFavPlaceDetails::class.java)
+        intent.putExtra(IntentKeys.FAVOURITE_Place,favouriteModel)
+        startActivity(intent)
     }
 
     override fun onDeleteIconClicked(favouriteModel: FavouriteModel) {

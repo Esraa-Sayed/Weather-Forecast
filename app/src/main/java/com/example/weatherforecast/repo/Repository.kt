@@ -171,6 +171,17 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
         }
         return remoteSource!!.getCurrentWeatherOverNetwork(latitude, longitude, language, measurementUnit)
     }
+    override suspend fun getFavWeatherOverNetwork(latitude:Float, longitude:Float): Response<WeatherModel> {
+        var language = readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+        var measurementUnit = ""
+        var tempreture = readStringFromSharedPreferences(SharedPrefrencesKeys.temperature)
+        when(tempreture){
+            context.getString(R.string.celsius) -> measurementUnit = "metric"
+            context.getString(R.string.fahrenheit)-> measurementUnit = "imperial"
+            context.getString(R.string.kelvin)-> measurementUnit = "standard"
+        }
+        return remoteSource!!.getCurrentWeatherOverNetwork(latitude, longitude, language, measurementUnit)
+    }
     override val allStoredWeatherModel: LiveData<List<WeatherModel>>
         get() = localSource!!.allStoredWeatherModel
 

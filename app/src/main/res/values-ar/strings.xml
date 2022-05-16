@@ -45,4 +45,5 @@
     <string name="Unknown_city">مدينة غير معروفة</string>
     <string name="place">مكان</string>
     <string name="You_want_to_delete_this_palce">تريد حذف هذا المكان</string>
+    <string name="Favourite_Place_Details">تفاصيل المكان المفضل</string>
 </resources>

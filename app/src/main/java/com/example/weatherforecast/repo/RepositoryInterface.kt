@@ -18,7 +18,10 @@ interface RepositoryInterface {
     fun getDataFromSharedPrefrences(): SharedPrefrencesDataClass
     fun getAppSharedPrefrences(): SharedPreferences
     fun isLocationSet():Boolean
+
     suspend fun getCurrentWeatherOverNetwork(): Response<WeatherModel>
+    suspend fun getFavWeatherOverNetwork(latitude:Float, longitude:Float): Response<WeatherModel>
+
     val allStoredWeatherModel: LiveData<List<WeatherModel>>
     fun insertWeatherModel(weatherModel: WeatherModel)
     fun getCurrentLocation()
@@ -27,4 +30,6 @@ interface RepositoryInterface {
     val allStoredFavouriteModel: LiveData<List<FavouriteModel>>
     fun insertFavouriateModel(favouriteModel:FavouriteModel)
     fun deleteFavouriateModel(favouriteModel: FavouriteModel)
+
+
 }

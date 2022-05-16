@@ -30,7 +30,7 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
             _errorMsgResponse.postValue(t.message)
         }
     }
-    private fun getCurrentWeatherFromNetwork(context:Context) {
+    private fun getCurrentWeatherFromNetwork() {
         _flagAPIFinishedDorNot.postValue(false)
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             val currentWeatherResponse = _repo.getCurrentWeatherOverNetwork()
@@ -43,14 +43,14 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
     fun observeOnSharedPref(context: Context){
 
         if (_repo.isLocationSet()) {
-            getCurrentWeatherFromNetwork(context)
+            getCurrentWeatherFromNetwork()
         }
         preferences = _repo.getAppSharedPrefrences()
          listener =
             SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
                 if (key == SharedPrefrencesKeys.latitude) {
                     if (_repo.isLocationSet()) {
-                        getCurrentWeatherFromNetwork(context)
+                        getCurrentWeatherFromNetwork()
                     }
                 }
             }

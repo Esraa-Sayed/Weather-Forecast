@@ -1,7 +1,6 @@
 package com.example.weatherforecast.HomeScreen.view
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -12,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,9 +28,6 @@ import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.repo.Repository
 import com.google.android.material.snackbar.Snackbar
 import de.hdodenhof.circleimageview.CircleImageView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
-
-
 
 
 class HomeScreenFragment : Fragment() {
@@ -80,10 +75,10 @@ class HomeScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init(view)
-        setUpViewModel(view)
+        getData(view)
     }
 
-    private fun setUpViewModel(view: View){
+    private fun getData(view: View){
         getWeatherView(view)
         viewModel.getLocalWeatherModele().observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {

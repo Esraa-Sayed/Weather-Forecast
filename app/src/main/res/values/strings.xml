@@ -45,5 +45,6 @@
     <string name="Cancle">Cancle</string>
     <string name="Unknown_city">Unknown city</string>
     <string name="place">Place</string>
+    <string name="Favourite_Place_Details">Favourite Place Details</string>
 
 </resources>
