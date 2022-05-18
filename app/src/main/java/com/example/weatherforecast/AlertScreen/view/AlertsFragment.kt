@@ -157,7 +157,7 @@ class AlertsFragment : Fragment(),OnButtonClickListener {
     private fun showDateTimePicker(label:String){
         val currentDate = Calendar.getInstance()
         var date: Calendar = Calendar.getInstance()
-        DatePickerDialog(
+        val datePickerDialog = DatePickerDialog(
             context!!,
             { view, year, monthOfYear, dayOfMonth ->
                 date.set(year, monthOfYear, dayOfMonth)
@@ -177,7 +177,9 @@ class AlertsFragment : Fragment(),OnButtonClickListener {
                     }, currentDate[Calendar.HOUR_OF_DAY], currentDate[Calendar.MINUTE], false
                 ).show()
             }, currentDate[Calendar.YEAR], currentDate[Calendar.MONTH], currentDate[Calendar.DATE]
-        ).show()
+        )
+        datePickerDialog.datePicker.minDate = currentDate.timeInMillis;
+        datePickerDialog.show();
     }
     private fun updateLabel(calendar: Calendar,editText: EditText):Long {
         val myFormat = "HH:mm a\ndd/MM/yyyy"
