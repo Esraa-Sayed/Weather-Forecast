@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.Model.FavouriteModel
 import com.example.weatherforecast.R
 
-class FavouriteRecyclerViewAdapter(private var context: Context,private var onItemClickListener: OnItemClickListener, private var favPlaces:List<FavouriteModel>, private val language:String):RecyclerView.Adapter<FavouriteRecyclerViewAdapter.ViewHolder>() {
+class FavouriteRecyclerViewAdapter(private var context: Context,private var onItemClickListener: OnItemClickListener, private var favPlaces:List<FavouriteModel>, private val language:String)
+    :RecyclerView.Adapter<FavouriteRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.favouriate_row,parent,false)

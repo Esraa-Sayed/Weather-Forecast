@@ -20,6 +20,16 @@ object APIRequest {
         format.timeZone = TimeZone.getTimeZone("GMT+2")
         return format.format(Date(dt * 1000L))
     }
+    fun convertTimeInMillisIntoString(milliSeconds:Long, dateFormat:String,language: String):String
+    {
+        // Create a DateFormatter object for displaying date in specified format.
+        val formatter = SimpleDateFormat(dateFormat, Locale(language))
+
+        // Create a calendar object that will convert the date and time value in milliseconds to date.
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = milliSeconds;
+        return formatter.format(calendar.time);
+    }
     fun setImageInView(context: Context,iconURL:String,imgViewCurrentWeatherIcon:ImageView){
         Glide
             .with(context)

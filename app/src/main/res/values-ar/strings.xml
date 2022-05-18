@@ -46,4 +46,9 @@
     <string name="place">مكان</string>
     <string name="You_want_to_delete_this_palce">تريد حذف هذا المكان</string>
     <string name="Favourite_Place_Details">تفاصيل المكان المفضل</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="alarm">Alarm</string>
+    <string name="save">Save</string>
+    <string name="notificationAlertsOption">Notification</string>
 </resources>

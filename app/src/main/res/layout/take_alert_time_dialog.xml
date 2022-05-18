@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300sp"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:focusable="true"
+        android:padding="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_25sdp"
+        app:cardElevation="-5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="#D2D9DA"
+            android:layout_width="300sp"
+            android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_32sdp"
+
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:focusable="true"
+            android:padding="@dimen/_10sdp"
+            app:cardCornerRadius="@dimen/_15sdp"
+            app:cardElevation="-1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/my_gradient_drawable">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/from"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_16ssp" />
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView2"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_32sdp"
+
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:focusable="true"
+            android:padding="@dimen/_10sdp"
+            app:cardCornerRadius="@dimen/_15sdp"
+            app:cardElevation="-1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/my_gradient_drawable">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/to"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_16ssp" />
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+
+        <EditText
+            android:id="@+id/startDateid"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:textColor="#1C2665"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:inputType="none"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <EditText
+            android:id="@+id/endDateid"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:textColor="#1C2665"
+            android:layout_marginEnd="16dp"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
+
+            android:inputType="none"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/startDateid"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <RadioGroup
+            android:id="@+id/alertOptions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startDateid">
+
+            <RadioButton
+                android:id="@+id/AlarmAlerts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_40sdp"
+                android:checked="true"
+                android:textColor="#1C2665"
+                android:textSize="@dimen/_14ssp"
+                android:gravity="center"
+                android:text="@string/alarm" />
+
+            <RadioButton
+                android:id="@+id/NotificationAlerts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#1C2665"
+                android:textSize="@dimen/_14ssp"
+                android:gravity="center"
+                android:text="@string/notificationAlertsOption" />
+
+        </RadioGroup>
+
+            <androidx.cardview.widget.CardView
+
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:focusable="true"
+                android:padding="@dimen/_10sdp"
+                app:cardCornerRadius="@dimen/_15sdp"
+                app:cardElevation="-1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/alertOptions">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/my_gradient_drawable">
+
+                    <Button
+                        android:id="@+id/saveAlertsData"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:text="@string/save"
+                        android:textAllCaps="false"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

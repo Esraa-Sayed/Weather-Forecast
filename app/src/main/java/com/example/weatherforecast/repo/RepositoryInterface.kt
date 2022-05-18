@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import com.example.weatherforecast.Model.FavouriteModel
 import com.example.weatherforecast.Model.SharedPrefrencesDataClass
+import com.example.weatherforecast.Model.UserAlerts
 import com.example.weatherforecast.Model.WeatherModel
 import retrofit2.Response
 
@@ -30,6 +31,10 @@ interface RepositoryInterface {
     val allStoredFavouriteModel: LiveData<List<FavouriteModel>>
     fun insertFavouriateModel(favouriteModel:FavouriteModel)
     fun deleteFavouriateModel(favouriteModel: FavouriteModel)
+
+    val allStoredAlerts: LiveData<List<UserAlerts>>
+    fun insertUserAlert(userAlerts:UserAlerts)
+    fun deleteUserAlert(userAlert: UserAlerts)
 
 
 }

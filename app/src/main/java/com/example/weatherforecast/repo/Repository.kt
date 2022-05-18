@@ -10,6 +10,7 @@ import com.example.weatherforecast.Constants.SharedPrefrencesKeys
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys.getCityNameFromLatAndLong
 import com.example.weatherforecast.Model.FavouriteModel
 import com.example.weatherforecast.Model.SharedPrefrencesDataClass
+import com.example.weatherforecast.Model.UserAlerts
 import com.example.weatherforecast.Model.WeatherModel
 import com.example.weatherforecast.Network.RemoteSource
 import com.example.weatherforecast.R
@@ -201,5 +202,16 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
     }
     override fun deleteFavouriateModel(favouriteModel: FavouriteModel){
         localSource!!.deleteFavouriateModelmovie(favouriteModel)
+    }
+
+    override val allStoredAlerts: LiveData<List<UserAlerts>>
+        get() = localSource!!.allStoredUserAlerts
+
+    override fun insertUserAlert(userAlert: UserAlerts) {
+        localSource!!.insertUserAlerts(userAlert)
+    }
+
+    override fun deleteUserAlert(userAlert: UserAlerts) {
+        localSource!!.deleteUserAlerts(userAlert)
     }
 }

@@ -46,5 +46,10 @@
     <string name="Unknown_city">Unknown city</string>
     <string name="place">Place</string>
     <string name="Favourite_Place_Details">Favourite Place Details</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="alarm">Alarm</string>
+    <string name="save">Save</string>
+    <string name="notificationAlertsOption">Notification</string>
 
 </resources>
