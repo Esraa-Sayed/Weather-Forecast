@@ -181,7 +181,7 @@ class AlertsFragment : Fragment(),OnButtonClickListener {
     }
     private fun updateLabel(calendar: Calendar,editText: EditText):Long {
         val myFormat = "HH:mm a\ndd/MM/yyyy"
-        val dateFormat = SimpleDateFormat(myFormat, Locale.US)
+        val dateFormat = SimpleDateFormat(myFormat, Locale(alertsViewModel.getAppLanguage()))
         val milliseconds: Long = calendar.timeInMillis
 
         editText.setText(dateFormat.format(calendar.time))

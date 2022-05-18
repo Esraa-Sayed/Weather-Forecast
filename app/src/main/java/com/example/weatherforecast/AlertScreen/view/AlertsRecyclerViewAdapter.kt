@@ -16,7 +16,10 @@ import com.example.weatherforecast.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AlertsRecyclerViewAdapter(private val context: Context,private val onButtonClickListener:OnButtonClickListener,private var userAlerts:List<UserAlerts>,private val language:String):RecyclerView.Adapter<AlertsRecyclerViewAdapter.ViewHolder>() {
+class AlertsRecyclerViewAdapter(private val context: Context,
+                                private val onButtonClickListener:OnButtonClickListener,
+                                private var userAlerts:List<UserAlerts>,
+                                private val language:String):RecyclerView.Adapter<AlertsRecyclerViewAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
