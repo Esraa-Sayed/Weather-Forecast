@@ -61,7 +61,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         favouriteViewModelFactory =  MainSettingFavouriteViewModelFactory(
-            Repository.getInstance(null, ConcreteLocalSource(this),this)
+            Repository.getInstance(null, ConcreteLocalSource(this))
         )
         favouriteViewModel = ViewModelProvider(this, favouriteViewModelFactory)[MainSettingFavouriteViewModel::class.java]
         mapSearchEdittext = binding.mapSearchEdittext
@@ -100,11 +100,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     private fun getLongitude():Float{
 
-        return favouriteViewModel.readFloatFromSharedPreferences(SharedPrefrencesKeys.longitude)
+        return favouriteViewModel.readFloatFromSharedPreferences(SharedPrefrencesKeys.longitude,this)
     }
     private fun getLatitude():Float{
 
-        return favouriteViewModel.readFloatFromSharedPreferences(SharedPrefrencesKeys.latitude)
+        return favouriteViewModel.readFloatFromSharedPreferences(SharedPrefrencesKeys.latitude,this)
     }
     fun moveCamera(latitude:Double,longitude:Double){
         val currentLocation = LatLng(latitude, longitude)
@@ -123,19 +123,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         moveCamera(getLatitude().toDouble(), getLongitude().toDouble())
         addMarker(getLatitude().toDouble(), getLongitude().toDouble(), "")
         googleMap.setOnMapClickListener {
-            addMarker(it.latitude, it.longitude, getFullAddress(it.latitude,it.longitude,favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language),this))
+            addMarker(it.latitude, it.longitude, getFullAddress(it.latitude,it.longitude,favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language,this),this))
             showConfirmDialog(it)
         }
 
     }
     private fun getAppLangauge():String{
-        return favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+        return favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language,this)
     }
     private fun showConfirmDialog(latLng: LatLng) {
         val builder: AlertDialog.Builder =  AlertDialog.Builder(this)
         builder.setCancelable(true)
         builder.setTitle(getString( R.string.are_You_Sure))
-        builder.setMessage(getFullAddress(latLng.latitude,latLng.longitude,favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language),this))
+        builder.setMessage(getFullAddress(latLng.latitude,latLng.longitude,favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language,this),this))
         builder.setPositiveButton(getString(R.string.Confirm)) { dialog, which ->
             if ( whoOpenMapActivity() == IntentKeys.SETTING_ACTIVITY){
                 Log.e("TAG", "geolocate: addressYYYYYYYYYYES" )
@@ -160,11 +160,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return intent.getStringExtra(IntentKeys.COME_FROM).toString()
     }
     private fun saveLocationOnSharedPrefrences(latLng: LatLng){
-        favouriteViewModel.changeSettingFloat(SharedPrefrencesKeys.latitude, latLng.latitude.toFloat())
-        favouriteViewModel.changeSettingFloat(SharedPrefrencesKeys.latitude, latLng.longitude.toFloat())
+        favouriteViewModel.changeSettingFloat(SharedPrefrencesKeys.latitude, latLng.latitude.toFloat(),this)
+        favouriteViewModel.changeSettingFloat(SharedPrefrencesKeys.latitude, latLng.longitude.toFloat(),this)
         val cityNameAr = SharedPrefrencesKeys.getCityNameFromLatAndLong(this,"ar", latLng.latitude,latLng.longitude)
         val cityNameEn = SharedPrefrencesKeys.getCityNameFromLatAndLong(this,"en", latLng.latitude,latLng.longitude)
-        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.cityArabic,cityNameAr)
-        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.cityEnglish,cityNameEn)
+        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.cityArabic,cityNameAr,this)
+        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.cityEnglish,cityNameEn,this)
     }
 }

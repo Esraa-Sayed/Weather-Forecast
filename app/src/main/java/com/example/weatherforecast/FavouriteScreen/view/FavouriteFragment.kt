@@ -61,12 +61,12 @@ class FavouriteFragment : Fragment(),OnItemClickListener {
 
         favouriteFavouriteViewModelFactory = MainSettingFavouriteViewModelFactory(
             Repository.getInstance(
-                WeatherClient.getInstance(), ConcreteLocalSource(view.context),view.context))
+                WeatherClient.getInstance(), ConcreteLocalSource(view.context)))
         favouriteFavouriteViewModel = ViewModelProvider(this,favouriteFavouriteViewModelFactory)[MainSettingFavouriteViewModel::class.java]
 
 
         favouriatePlaces = view.findViewById(R.id.favRecyclerView)
-        favouritePlacesAdapter = FavouriteRecyclerViewAdapter(view.context,this, emptyList(),favouriteFavouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language))
+        favouritePlacesAdapter = FavouriteRecyclerViewAdapter(view.context,this, emptyList(),favouriteFavouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language,myView.context))
         var layoutMan = LinearLayoutManager(activity)
         favouriatePlaces.apply {
             setHasFixedSize(true)

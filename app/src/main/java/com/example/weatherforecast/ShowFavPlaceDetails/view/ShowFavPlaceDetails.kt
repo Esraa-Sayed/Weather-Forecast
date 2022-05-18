@@ -1,6 +1,5 @@
 package com.example.weatherforecast.ShowFavPlaceDetails.view
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -17,8 +16,6 @@ import com.example.weatherforecast.Constants.APIRequest
 import com.example.weatherforecast.Constants.IntentKeys
 import com.example.weatherforecast.HomeScreen.view.DaysWeathersAdapter
 import com.example.weatherforecast.HomeScreen.view.HourlyWeathersAdapter
-import com.example.weatherforecast.HomeScreen.viewModel.HomeViewModel
-import com.example.weatherforecast.HomeScreen.viewModel.HomeViewModelFactory
 import com.example.weatherforecast.Model.FavouriteModel
 import com.example.weatherforecast.Model.WeatherModel
 import com.example.weatherforecast.Network.WeatherClient
@@ -79,13 +76,13 @@ class ShowFavPlaceDetails : AppCompatActivity() {
         })
     }
     private fun putDataOnView(weather: WeatherModel){
-        if (viewModel.getAppLanguage() == "en")
+        if (viewModel.getAppLanguage(this) == "en")
             city.text = favouriteModel.addressEn
         else
             city.text = favouriteModel.addressAr
         var weatherCurrent = weather.current
         var weatherDesc = weatherCurrent.weather[0]
-        date.text = APIRequest.getDateTime(weatherCurrent.dt,"EEE, d MMM ",viewModel.getAppLanguage())
+        date.text = APIRequest.getDateTime(weatherCurrent.dt,"EEE, d MMM ",viewModel.getAppLanguage(this))
         weatherDescription.text = weatherDesc.description
         tempTextView.text = weatherCurrent.temp.toString()
         tempTypeTextView.text = viewModel.getTempMeasuringUnit(this)
@@ -95,7 +92,7 @@ class ShowFavPlaceDetails : AppCompatActivity() {
         humidityTxt.text = weatherCurrent.humidity.toString()
         cloudTxt.text = weatherCurrent.clouds.toString()
         visibilityTxt.text = weatherCurrent.clouds.toString()
-        when( viewModel.getWindSpeedMeasuringUnit()){
+        when( viewModel.getWindSpeedMeasuringUnit(this)){
 
             this.getString(R.string.meter_sec) -> windTxt.text = weatherCurrent.windSpeed.toString()
 
@@ -112,7 +109,7 @@ class ShowFavPlaceDetails : AppCompatActivity() {
     private fun init(){
         showFavPlaceViewModelFactory = ShowFavPlaceViewModelFactory(
             Repository.getInstance(
-                WeatherClient.getInstance(), ConcreteLocalSource(this),this))
+                WeatherClient.getInstance(), ConcreteLocalSource(this)))
         viewModel = ViewModelProvider(this,showFavPlaceViewModelFactory)[ShowFavPlaceViewModel::class.java]
 
         city = findViewById(R.id.city)
@@ -126,8 +123,8 @@ class ShowFavPlaceDetails : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         cardView = findViewById(R.id.cardView)
         cardView2 = findViewById(R.id.cardView2)
-        hourlyWeathersAdapter = HourlyWeathersAdapter(this, emptyList(),viewModel.getAppLanguage(),viewModel.getTempMeasuringUnit(this))
-        daysWeathersAdapter = DaysWeathersAdapter(this, emptyList(),viewModel.getAppLanguage(),viewModel.getTempMeasuringUnit(this))
+        hourlyWeathersAdapter = HourlyWeathersAdapter(this, emptyList(),viewModel.getAppLanguage(this),viewModel.getTempMeasuringUnit(this))
+        daysWeathersAdapter = DaysWeathersAdapter(this, emptyList(),viewModel.getAppLanguage(this),viewModel.getTempMeasuringUnit(this))
         var layoutM = LinearLayoutManager(this)
         hourlyForTheCurrentDate.apply {
             setHasFixedSize(true)

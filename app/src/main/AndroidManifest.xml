@@ -25,7 +25,9 @@
         android:theme="@style/Theme.WeatherForecast">
         <activity
             android:name=".DialogActivity.view.DialogActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar"
+            />
         <activity
             android:name=".ShowFavPlaceDetails.view.ShowFavPlaceDetails"
             android:exported="false"

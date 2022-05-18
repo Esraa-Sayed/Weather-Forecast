@@ -1,5 +1,6 @@
 package com.example.weatherforecast.AlertScreen.viewModel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,8 +30,8 @@ class AlertsViewModel(private val _repo: RepositoryInterface): ViewModel() {
             _repo.deleteUserAlert(userAlerts)
         }
     }
-    fun getAppLanguage():String{
-        return _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+    fun getAppLanguage(context:Context):String{
+        return _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.language, context)
     }
     fun getLocalWeatherModele(): LiveData<List<WeatherModel>> {
         return _repo.allStoredWeatherModel

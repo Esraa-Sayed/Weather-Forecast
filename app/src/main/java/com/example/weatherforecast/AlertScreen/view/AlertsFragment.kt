@@ -84,12 +84,12 @@ class AlertsFragment : Fragment(),OnButtonClickListener {
     private fun init() {
 
         alertsViewModelFactory =  AlertsViewModelFactory(
-            Repository.getInstance(null, ConcreteLocalSource(myView.context),myView.context)
+            Repository.getInstance(null, ConcreteLocalSource(myView.context))
         )
         alertsViewModel = ViewModelProvider(this, alertsViewModelFactory)[AlertsViewModel::class.java]
 
         alertsRecyclerView = myView.findViewById(R.id.alertsRecyclerView)
-        alertsRecyclerViewAdapter = AlertsRecyclerViewAdapter(myView.context,this, emptyList(),alertsViewModel.getAppLanguage())
+        alertsRecyclerViewAdapter = AlertsRecyclerViewAdapter(myView.context,this, emptyList(),alertsViewModel.getAppLanguage(myView.context))
         var layoutMan = LinearLayoutManager(activity)
         alertsRecyclerView.apply {
             setHasFixedSize(true)
@@ -270,7 +270,7 @@ class AlertsFragment : Fragment(),OnButtonClickListener {
     }
     private fun updateLabel(calendar: Calendar,editText: EditText):Long {
         val myFormat = "HH:mm a\ndd/MM/yyyy"
-        val dateFormat = SimpleDateFormat(myFormat, Locale(alertsViewModel.getAppLanguage()))
+        val dateFormat = SimpleDateFormat(myFormat, Locale(alertsViewModel.getAppLanguage(myView.context)))
         val milliseconds: Long = calendar.timeInMillis
 
         editText.setText(dateFormat.format(calendar.time))

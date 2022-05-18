@@ -107,7 +107,7 @@ class HomeScreenFragment : Fragment() {
     private fun init(view: View){
         homeViewModelFactory = HomeViewModelFactory(
             Repository.getInstance(
-                WeatherClient.getInstance(), ConcreteLocalSource(view.context),view.context))
+                WeatherClient.getInstance(), ConcreteLocalSource(view.context)))
         viewModel = ViewModelProvider(this,homeViewModelFactory)[HomeViewModel::class.java]
 
         city = view.findViewById(R.id.city)
@@ -121,8 +121,8 @@ class HomeScreenFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar)
         cardView = view.findViewById(R.id.cardView)
         cardView2 = view.findViewById(R.id.cardView2)
-        hourlyWeathersAdapter = HourlyWeathersAdapter(view.context, emptyList(),viewModel.getAppLanguage(),viewModel.getTempMeasuringUnit(view.context))
-        daysWeathersAdapter = DaysWeathersAdapter(view.context, emptyList(),viewModel.getAppLanguage(),viewModel.getTempMeasuringUnit(view.context))
+        hourlyWeathersAdapter = HourlyWeathersAdapter(view.context, emptyList(),viewModel.getAppLanguage(view.context),viewModel.getTempMeasuringUnit(view.context))
+        daysWeathersAdapter = DaysWeathersAdapter(view.context, emptyList(),viewModel.getAppLanguage(view.context),viewModel.getTempMeasuringUnit(view.context))
         var layoutM = LinearLayoutManager(activity)
         hourlyForTheCurrentDate.apply {
             setHasFixedSize(true)
@@ -165,10 +165,10 @@ class HomeScreenFragment : Fragment() {
         viewModel.unRegisterOnSharedPreferenceChangeListener()
     }
     private fun putDataOnView(weather:WeatherModel,context: Context){
-        city.text = viewModel.getCityName()
+        city.text = viewModel.getCityName(context)
         var weatherCurrent = weather.current
         var weatherDesc = weatherCurrent.weather[0]
-        date.text = APIRequest.getDateTime(weatherCurrent.dt,"EEE, d MMM ",viewModel.getAppLanguage())
+        date.text = APIRequest.getDateTime(weatherCurrent.dt,"EEE, d MMM ",viewModel.getAppLanguage(context))
         weatherDescription.text = weatherDesc.description
         tempTextView.text = weatherCurrent.temp.toString()
         tempTypeTextView.text = viewModel.getTempMeasuringUnit(context)
@@ -178,7 +178,7 @@ class HomeScreenFragment : Fragment() {
         humidityTxt.text = weatherCurrent.humidity.toString()
         cloudTxt.text = weatherCurrent.clouds.toString()
         visibilityTxt.text = weatherCurrent.clouds.toString()
-        when( viewModel.getWindSpeedMeasuringUnit()){
+        when( viewModel.getWindSpeedMeasuringUnit(context)){
 
             context.getString(R.string.meter_sec) -> windTxt.text = weatherCurrent.windSpeed.toString()
 

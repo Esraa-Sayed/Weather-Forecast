@@ -30,10 +30,10 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
             _errorMsgResponse.postValue(t.message)
         }
     }
-    private fun getCurrentWeatherFromNetwork() {
+    private fun getCurrentWeatherFromNetwork(context: Context) {
         _flagAPIFinishedDorNot.postValue(false)
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
-            val currentWeatherResponse = _repo.getCurrentWeatherOverNetwork()
+            val currentWeatherResponse = _repo.getCurrentWeatherOverNetwork(context)
             if (currentWeatherResponse.isSuccessful) {
                 _weatherData.postValue(currentWeatherResponse.body())
                 _flagAPIFinishedDorNot.postValue(true)
@@ -42,15 +42,15 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
     }
     fun observeOnSharedPref(context: Context){
 
-        if (_repo.isLocationSet()) {
-            getCurrentWeatherFromNetwork()
+        if (_repo.isLocationSet(context)) {
+            getCurrentWeatherFromNetwork(context)
         }
-        preferences = _repo.getAppSharedPrefrences()
+        preferences = _repo.getAppSharedPrefrences(context)
          listener =
             SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
                 if (key == SharedPrefrencesKeys.latitude) {
-                    if (_repo.isLocationSet()) {
-                        getCurrentWeatherFromNetwork()
+                    if (_repo.isLocationSet(context)) {
+                        getCurrentWeatherFromNetwork(context)
                     }
                 }
             }
@@ -61,26 +61,26 @@ class HomeViewModel(private val _repo: RepositoryInterface): ViewModel()  {
         if(this::listener.isInitialized)
             preferences.unregisterOnSharedPreferenceChangeListener(listener)
     }
-    fun getCityName():String{
-        val currrentAppLang = _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+    fun getCityName(context: Context):String{
+        val currrentAppLang = _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.language,context)
         if(currrentAppLang == "en")
-            return _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.cityEnglish)
+            return _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.cityEnglish,context)
         else
-            return _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.cityArabic)
+            return _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.cityArabic,context)
     }
-    fun getAppLanguage():String{
-         return  _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+    fun getAppLanguage(context: Context):String{
+         return  _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.language,context)
     }
     fun  getTempMeasuringUnit(context: Context):String{
-        val currentMeasuringUnit = _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.temperature)
+        val currentMeasuringUnit = _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.temperature,context)
         return when(currentMeasuringUnit){
             context.getString(R.string.celsius) -> "°C"
             context.getString(R.string.fahrenheit)-> "°F"
             else-> "°K"
         }
     }
-    fun getWindSpeedMeasuringUnit():String{
-        return  _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.windSpeed)
+    fun getWindSpeedMeasuringUnit(context: Context):String{
+        return  _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.windSpeed, context)
     }
     fun addWeatherModelInRoom(weatherModel: WeatherModel){
         viewModelScope.launch(Dispatchers.IO) {

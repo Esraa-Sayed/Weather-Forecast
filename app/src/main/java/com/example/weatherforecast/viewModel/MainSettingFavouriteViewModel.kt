@@ -13,30 +13,29 @@ import kotlinx.coroutines.launch
 
 class MainSettingFavouriteViewModel(private val _repo: RepositoryInterface): ViewModel() {
     fun setDataToSharedPrefInFirstTime(context: Context){
-      if(!_repo.readBooleanFromSharedPreferences(SharedPrefrencesKeys.isNotFirstTime))
-          _repo.writeSettingDataInPreferencesForFirstTime()
+      if(!_repo.readBooleanFromSharedPreferences(SharedPrefrencesKeys.isNotFirstTime,context))
+          _repo.writeSettingDataInPreferencesForFirstTime(context)
     }
-    fun getDataFromSharedPrefrences():SharedPrefrencesDataClass{
-        var data= _repo.getDataFromSharedPrefrences()
-        return data
+    fun changeSettingStrings(key:String, value:String,context: Context){
+        _repo.setStringToSharedPrefrences(key,value,context)
     }
-    fun changeSettingStrings(key:String, value:String){
-        _repo.setStringToSharedPrefrences(key,value)
+    fun changeSettingFloat(key:String, value:Float,context: Context){
+        _repo.setFloatToSharedPrefrences(key,value,context)
     }
-    fun changeSettingFloat(key:String, value:Float){
-        _repo.setFloatToSharedPrefrences(key,value)
+    fun getLocationAndSaveItInSharedPref(context: Context){
+        _repo.getCurrentLocation(context)
     }
-    fun getLocationAndSaveItInSharedPref(){
-        _repo.getCurrentLocation()
+    fun changeSettingBoolean(key:String, value:Boolean,context: Context){
+        _repo.setBoolToSharedPrefrences(key, value,context)
     }
-    fun changeSettingBoolean(key:String, value:Boolean){
-        _repo.setBoolToSharedPrefrences(key, value)
+    fun readFloatFromSharedPreferences(dataNeed: String,context: Context):Float{
+        return _repo.readFloatFromSharedPreferences(dataNeed,context)
     }
-    fun readFloatFromSharedPreferences(dataNeed: String):Float{
-        return _repo.readFloatFromSharedPreferences(dataNeed)
+    fun readBooleanFromSharedPreferences(dataNeed: String,context: Context):Boolean{
+        return _repo.readBooleanFromSharedPreferences(dataNeed,context)
     }
-    fun readStringFromSharedPreferences(dataNeed: String):String{
-        return _repo.readStringFromSharedPreferences(dataNeed)
+    fun readStringFromSharedPreferences(dataNeed: String,context: Context):String{
+        return _repo.readStringFromSharedPreferences(dataNeed,context)
     }
     fun insertFavouriatePlace(favouriteModel: FavouriteModel){
         viewModelScope.launch(Dispatchers.IO) {

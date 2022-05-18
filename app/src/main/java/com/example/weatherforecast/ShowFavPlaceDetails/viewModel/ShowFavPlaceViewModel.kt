@@ -30,25 +30,25 @@ class ShowFavPlaceViewModel (private val _repo: RepositoryInterface): ViewModel(
     fun getFavWeatherFromNetwork(context: Context,latitude:Float, longitude:Float) {
         _flagAPIFinishedDorNot.postValue(false)
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
-            val currentWeatherResponse = _repo.getFavWeatherOverNetwork(latitude,longitude)
+            val currentWeatherResponse = _repo.getFavWeatherOverNetwork(latitude,longitude,context)
             if (currentWeatherResponse.isSuccessful) {
                 _weatherData.postValue(currentWeatherResponse.body())
                 _flagAPIFinishedDorNot.postValue(true)
             }
         }
     }
-    fun getAppLanguage():String{
-        return  _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+    fun getAppLanguage(context: Context):String{
+        return  _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.language, context )
     }
     fun  getTempMeasuringUnit(context: Context):String{
-        val currentMeasuringUnit = _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.temperature)
+        val currentMeasuringUnit = _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.temperature,context)
         return when(currentMeasuringUnit){
             context.getString(R.string.celsius) -> "°C"
             context.getString(R.string.fahrenheit)-> "°F"
             else-> "°K"
         }
     }
-    fun getWindSpeedMeasuringUnit():String{
-        return  _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.windSpeed)
+    fun getWindSpeedMeasuringUnit(context: Context):String{
+        return  _repo.readStringFromSharedPreferences(SharedPrefrencesKeys.windSpeed, context)
     }
 }

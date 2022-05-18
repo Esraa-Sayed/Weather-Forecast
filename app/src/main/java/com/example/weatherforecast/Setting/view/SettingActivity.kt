@@ -47,7 +47,7 @@ class SettingActivity : AppCompatActivity() {
         language = findViewById(R.id.language)
         mapRadioButton = findViewById(R.id.mapRadioButton)
         favouriteViewModelFactory =  MainSettingFavouriteViewModelFactory(
-            Repository.getInstance(null, null,this)
+            Repository.getInstance(null, null)
         )
         favouriteViewModel = ViewModelProvider(this, favouriteViewModelFactory)[MainSettingFavouriteViewModel::class.java]
 
@@ -59,9 +59,9 @@ class SettingActivity : AppCompatActivity() {
     private fun addNotificationLisetener(){
         notification.setOnCheckedChangeListener{_, isChecked ->
             if (isChecked) {
-                favouriteViewModel.changeSettingBoolean(SharedPrefrencesKeys.notification,isChecked)
+                favouriteViewModel.changeSettingBoolean(SharedPrefrencesKeys.notification,isChecked,this)
             } else {
-                favouriteViewModel.changeSettingBoolean(SharedPrefrencesKeys.notification,false)
+                favouriteViewModel.changeSettingBoolean(SharedPrefrencesKeys.notification,false,this)
             }
         }
     }
@@ -69,7 +69,7 @@ class SettingActivity : AppCompatActivity() {
 
        mapRadioButton.setOnClickListener {
            openMap()
-           favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.locationState, mapRadioButton.getText().toString())
+           favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.locationState, mapRadioButton.getText().toString(),this)
        }
         location.setOnCheckedChangeListener{radioGroup, checkedId ->
             if (!flagOnClickListenerBecauseConfig){
@@ -77,8 +77,8 @@ class SettingActivity : AppCompatActivity() {
                  locationText = radioButton.getText().toString()
                 if(locationText == getString(R.string.gps))
                 {
-                    favouriteViewModel.getLocationAndSaveItInSharedPref()
-                    favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,locationText)
+                    favouriteViewModel.getLocationAndSaveItInSharedPref(this)
+                    favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,locationText,this)
                 }
 
             }
@@ -87,14 +87,14 @@ class SettingActivity : AppCompatActivity() {
             if (!flagOnClickListenerBecauseConfig) {
                 radioButton = findViewById(checkedId)
                 windSpeedText = radioButton.getText().toString()
-                favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed, windSpeedText)
+                favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed, windSpeedText,this)
           }
         }
         temperature.setOnCheckedChangeListener{_,checkedId->
             if (!flagOnClickListenerBecauseConfig){
                 radioButton = findViewById(checkedId)
                 temperatureText = radioButton.getText().toString()
-                favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,temperatureText)
+                favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,temperatureText,this)
             }
         }
         language.setOnCheckedChangeListener{_,checkedId->
@@ -111,7 +111,7 @@ class SettingActivity : AppCompatActivity() {
                 }
                 finish();
                 startActivity(intent);
-                favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.language,languageText)
+                favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.language,languageText,this)
                 Log.e("Tag", "addRadioGroupListener: ${languageText}" )
             }
         }
@@ -122,12 +122,16 @@ class SettingActivity : AppCompatActivity() {
         startActivity(intent)
     }
    private fun setConfigrationData(){
-        var data  = favouriteViewModel.getDataFromSharedPrefrences()
-        setLocationState(data.locationState)
-        setWindSpeed(data.windSpeed)
-        setTemperature(data.temperature)
-        setLanguage(data.language)
-        setNotification(data.notification)
+        val locationState  = favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.locationState,this)
+        val windSpeed  = favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.windSpeed,this)
+        val temperature  = favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.temperature,this)
+        val language  = favouriteViewModel.readStringFromSharedPreferences(SharedPrefrencesKeys.language,this)
+        val notification  = favouriteViewModel.readBooleanFromSharedPreferences(SharedPrefrencesKeys.notification,this)
+        setLocationState(locationState)
+        setWindSpeed(windSpeed)
+        setTemperature(temperature)
+        setLanguage(language)
+        setNotification(notification)
        flagOnClickListenerBecauseConfig = false
 
 
@@ -178,9 +182,9 @@ class SettingActivity : AppCompatActivity() {
     private fun setNotification(notificationState: Boolean){
         notification.isChecked = notificationState
         //to use it when change language
-        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,getTextOnCheckedRadioButton(temperature))
-        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed,getTextOnCheckedRadioButton(windSpeed))
-        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,getTextOnCheckedRadioButton(location))
+        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.temperature,getTextOnCheckedRadioButton(temperature),this)
+        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.windSpeed,getTextOnCheckedRadioButton(windSpeed),this)
+        favouriteViewModel.changeSettingStrings(SharedPrefrencesKeys.locationState,getTextOnCheckedRadioButton(location),this)
     }
     private fun getTextOnCheckedRadioButton(radioButtonGroup:RadioGroup):String{
         val radioButtonID = radioButtonGroup.checkedRadioButtonId

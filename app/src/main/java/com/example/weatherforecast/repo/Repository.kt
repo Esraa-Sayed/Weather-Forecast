@@ -14,93 +14,61 @@ import com.example.weatherforecast.Model.UserAlerts
 import com.example.weatherforecast.Model.WeatherModel
 import com.example.weatherforecast.Network.RemoteSource
 import com.example.weatherforecast.R
+import com.example.weatherforecast.SharedPref.SharedPref
 import com.example.weatherforecast.db.LocalSource
 import com.google.android.gms.location.*
 import retrofit2.Response
 import java.io.IOException
 import java.util.*
 
-class Repository private constructor(var remoteSource: RemoteSource?, var localSource: LocalSource?, var context: Context): RepositoryInterface {
+class Repository private constructor(var remoteSource: RemoteSource?, var localSource: LocalSource?): RepositoryInterface {
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
-    private var longitude:Float = 0.0f;
-    private var latitude:Float = 0.0f;
+
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
-
+    private var longitude: Float = 0.0f;
+    private var latitude: Float = 0.0f;
     companion object{
         private var instance: Repository? = null
-        fun getInstance(remoteSource: RemoteSource?,localSource: LocalSource?, context: Context,): Repository {
-            return instance ?: Repository(remoteSource,localSource,context)
+        fun getInstance(remoteSource: RemoteSource?,localSource: LocalSource?): Repository {
+            return instance ?: Repository(remoteSource,localSource)
         }
     }
-    override fun writeSettingDataInPreferencesForFirstTime() {
-        getCurrentLocation()
-        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
-        val editor = preferences.edit()
-        editor.putString(SharedPrefrencesKeys.windSpeed, "Meter/Sec")
-        editor.putString(SharedPrefrencesKeys.temperature, "Celsius")
-        editor.putString(SharedPrefrencesKeys.language,getCurrentDeviceLanguage())
-        editor.putFloat(SharedPrefrencesKeys.longitude,longitude)
-        editor.putFloat(SharedPrefrencesKeys.latitude,latitude)
-        editor.putString(SharedPrefrencesKeys.locationState,"GPS")
-        editor.putBoolean(SharedPrefrencesKeys.notification,true)
-        editor.putBoolean(SharedPrefrencesKeys.isNotFirstTime,true)
-        editor.commit()
+    override fun writeSettingDataInPreferencesForFirstTime(context: Context) {
+        getCurrentLocation(context)
+        SharedPref.getInstance(context).writeSettingDataInPreferencesForFirstTime()
 
     }
-    override fun readBooleanFromSharedPreferences(dataNeed: String):Boolean{
-        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
+    override fun readBooleanFromSharedPreferences(dataNeed: String,context: Context):Boolean{
 
-        return preferences.getBoolean(dataNeed, false)
+        return SharedPref.getInstance(context).readBooleanFromSharedPreferences(dataNeed)
     }
-    override fun readFloatFromSharedPreferences(dataNeed: String):Float{
-        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
+    override fun readFloatFromSharedPreferences(dataNeed: String, context: Context): Float {
 
-        return preferences.getFloat(dataNeed, 0.0f)
+        return SharedPref.getInstance(context).readFloatFromSharedPreferences(dataNeed)
     }
-    override fun readStringFromSharedPreferences(dataNeed:String): String {
-        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
+    override fun readStringFromSharedPreferences(dataNeed: String, context: Context): String {
 
-        return preferences.getString(dataNeed, "notFound").toString()
+        return SharedPref.getInstance(context).readStringFromSharedPreferences(dataNeed)
     }
-    override fun getDataFromSharedPrefrences(): SharedPrefrencesDataClass {
-        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
-        val windSpeed = preferences.getString(SharedPrefrencesKeys.windSpeed, "notFound").toString()
-        val temp = preferences.getString(SharedPrefrencesKeys.temperature, "notFound").toString()
-        val locationState = preferences.getString(SharedPrefrencesKeys.locationState, "notFound").toString()
-        val lang = preferences.getString(SharedPrefrencesKeys.language,getCurrentDeviceLanguage()).toString()
-        var notification = preferences.getBoolean(SharedPrefrencesKeys.notification,true)
-        var data = SharedPrefrencesDataClass(locationState,windSpeed,temp,lang,notification)
-        return data
+
+    override fun setStringToSharedPrefrences(key: String, value: String, context: Context) {
+        SharedPref.getInstance(context).setStringToSharedPrefrences(key,value)
     }
-    override fun setStringToSharedPrefrences(key:String, value:String){
-        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
-        val editor = preferences.edit()
-        editor.putString(key, value)
-        editor.commit()
+    override fun setFloatToSharedPrefrences(key: String, value: Float, context: Context) {
+        SharedPref.getInstance(context).setFloatToSharedPrefrences(key,value)
     }
-    override fun setFloatToSharedPrefrences(key:String, value:Float){
-        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
-        val editor = preferences.edit()
-        editor.putFloat(key, value)
-        editor.commit()
+    override fun setBoolToSharedPrefrences(key: String, value: Boolean, context: Context) {
+       SharedPref.getInstance(context).setBoolToSharedPrefrences(key,value)
     }
-    override fun setBoolToSharedPrefrences(key:String, value:Boolean){
-        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
-        val editor = preferences.edit()
-        editor.putBoolean(key, value)
-        editor.commit()
+    override fun getAppSharedPrefrences(context: Context): SharedPreferences {
+        return SharedPref.getInstance(context).getAppSharedPrefrences()
     }
-    override fun getAppSharedPrefrences():SharedPreferences{
-        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
-        return preferences
-    }
-    override fun isLocationSet():Boolean{
-        val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
-        return preferences.getFloat(SharedPrefrencesKeys.latitude, 0.0f) != 0.0f
+    override fun isLocationSet(context: Context): Boolean {
+        return SharedPref.getInstance(context).isLocationSet()
     }
     @SuppressLint("MissingPermission")
-    override fun getCurrentLocation(){
+    override fun getCurrentLocation(context: Context){
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( context)
         locationRequest = LocationRequest.create().apply {
             interval = 10000
@@ -116,7 +84,7 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
                 longitude = location.longitude.toFloat()
                 latitude = location.latitude.toFloat()
 
-                getCityName()
+                getCityName(context)
                 Log.e("Location222", "getCurrentLocation: ${location.longitude}  , ${location.latitude}" )
                 fusedLocationProviderClient.removeLocationUpdates(locationCallback)
             }
@@ -125,19 +93,19 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
             Looper.getMainLooper())
     }
 
-    private fun getCityName(){
+    private fun getCityName(context: Context){
         var cityNameEn = ""
         var cityNameAr = ""
         try {
             cityNameEn = getCityNameFromLatAndLong(context, "en", latitude.toDouble(), longitude.toDouble())
             cityNameAr = getCityNameFromLatAndLong(context, "ar", latitude.toDouble(), longitude.toDouble())
-            saveCityNamesArabicAndEnglishInSharedPrefrences(cityNameEn,cityNameAr)
+            saveCityNamesArabicAndEnglishInSharedPrefrences(cityNameEn,cityNameAr,context)
 
         } catch (e: IOException) {
             Log.e("Error", "getCityName: ${e.localizedMessage}")
         }
     }
-    private fun saveCityNamesArabicAndEnglishInSharedPrefrences(cityNameEn: String, cityNameAr: String) {
+    private fun saveCityNamesArabicAndEnglishInSharedPrefrences(cityNameEn: String, cityNameAr: String,context: Context) {
         val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
         val editor = preferences.edit()
         editor.putString(SharedPrefrencesKeys.cityEnglish,cityNameEn)
@@ -147,24 +115,14 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
         editor.commit()
         Log.e("locationCity", "getCityName: $cityNameEn ar: $cityNameAr" )
     }
-    private fun getCurrentDeviceLanguage():String{
-        var currentlanguage = Locale.getDefault().getDisplayLanguage()
-        if(currentlanguage.equals("العربية"))
-        {
-            currentlanguage = "ar"
-        }
-        else{
-            currentlanguage = "en"
-        }
-        return currentlanguage
-    }
 
-    override suspend fun getCurrentWeatherOverNetwork(): Response<WeatherModel> {
-        var latitude = readFloatFromSharedPreferences(SharedPrefrencesKeys.latitude)
-        var longitude = readFloatFromSharedPreferences(SharedPrefrencesKeys.longitude)
-        var language = readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+
+    override suspend fun getCurrentWeatherOverNetwork(context: Context): Response<WeatherModel> {
+        var latitude = readFloatFromSharedPreferences(SharedPrefrencesKeys.latitude,context)
+        var longitude = readFloatFromSharedPreferences(SharedPrefrencesKeys.longitude,context)
+        var language = readStringFromSharedPreferences(SharedPrefrencesKeys.language,context)
         var measurementUnit = ""
-        var tempreture = readStringFromSharedPreferences(SharedPrefrencesKeys.temperature)
+        var tempreture = readStringFromSharedPreferences(SharedPrefrencesKeys.temperature,context)
         when(tempreture){
             context.getString(R.string.celsius) -> measurementUnit = "metric"
             context.getString(R.string.fahrenheit)-> measurementUnit = "imperial"
@@ -172,10 +130,14 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
         }
         return remoteSource!!.getCurrentWeatherOverNetwork(latitude, longitude, language, measurementUnit)
     }
-    override suspend fun getFavWeatherOverNetwork(latitude:Float, longitude:Float): Response<WeatherModel> {
-        var language = readStringFromSharedPreferences(SharedPrefrencesKeys.language)
+    override suspend fun getFavWeatherOverNetwork(
+        latitude: Float,
+        longitude: Float,
+        context: Context
+    ): Response<WeatherModel> {
+        var language = readStringFromSharedPreferences(SharedPrefrencesKeys.language,context)
         var measurementUnit = ""
-        var tempreture = readStringFromSharedPreferences(SharedPrefrencesKeys.temperature)
+        var tempreture = readStringFromSharedPreferences(SharedPrefrencesKeys.temperature,context)
         when(tempreture){
             context.getString(R.string.celsius) -> measurementUnit = "metric"
             context.getString(R.string.fahrenheit)-> measurementUnit = "imperial"

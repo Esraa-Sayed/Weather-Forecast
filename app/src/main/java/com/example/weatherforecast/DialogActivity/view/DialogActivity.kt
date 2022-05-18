@@ -32,7 +32,7 @@ class DialogActivity : AppCompatActivity() {
 
     private fun startSound() {
         if (mMediaPlayer == null) { //mMediaPkayer is your variable
-            mMediaPlayer = MediaPlayer.create(this, R.raw.weather_sound) //raw is the folder where you have the audio files or sounds, water is the audio file (is a example right)
+            mMediaPlayer = MediaPlayer.create(this, R.raw.weather_sound2) //raw is the folder where you have the audio files or sounds, water is the audio file (is a example right)
             mMediaPlayer!!.isLooping = true //to repeat again n again
             mMediaPlayer!!.start() //to start the sound
         }

@@ -39,11 +39,11 @@ class MyCoroutineWorker(private val context: Context, parameters: WorkerParamete
             val fromTimeInMillis = inputData.getLong(FROM_TIME_IN_MILLIS, 0L)
 
             notificationRepository =
-                Repository.getInstance(null, ConcreteLocalSource(applicationContext),context)
+                Repository.getInstance(null, ConcreteLocalSource(applicationContext))
 
             if (checkTime(myAlert)) {
                 Log.e("TAG", "doWork: *************222" )
-                if (notificationRepository.readBooleanFromSharedPreferences(SharedPrefrencesKeys.notification) || myAlert.alertOption == AlertsConstants.NOTIFICATION){
+                if (notificationRepository.readBooleanFromSharedPreferences(SharedPrefrencesKeys.notification,context) || myAlert.alertOption == AlertsConstants.NOTIFICATION){
                     openNotification(context, myAlert, description!!, icon!!, context.getString(R.string.app_name))
                     Log.e("TAG", "doWork: *************333" )
                 }

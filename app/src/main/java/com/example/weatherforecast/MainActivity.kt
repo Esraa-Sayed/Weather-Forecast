@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView = findViewById(R.id.bottomnavigation)
         val navController2 = findNavController(this, R.id.nav_host_fragment_activity_main)
         favouriteViewModelFactory =  MainSettingFavouriteViewModelFactory(
-            Repository.getInstance(null, null,this)
+            Repository.getInstance(null, null)
         )
         favouriteViewModel = ViewModelProvider(this, favouriteViewModelFactory)[MainSettingFavouriteViewModel::class.java]
         setupWithNavController(bottomNavigationView, navController2)
