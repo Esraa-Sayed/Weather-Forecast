@@ -39,8 +39,8 @@ class ConcreteLocalSource(context: Context) : LocalSource {
         favouriteDAO?.deleteFavouriteModel(favouriteModel)
     }
 
-    override fun insertUserAlerts(userAlerts: UserAlerts) {
-       alertsUserDAO?.insertUserAlerts(userAlerts)
+    override fun insertUserAlerts(userAlerts: UserAlerts):Long {
+      return alertsUserDAO?.insertUserAlerts(userAlerts)!!
     }
 
     override fun deleteUserAlerts(userAlerts: UserAlerts) {

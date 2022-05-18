@@ -33,8 +33,9 @@ interface RepositoryInterface {
     fun deleteFavouriateModel(favouriteModel: FavouriteModel)
 
     val allStoredAlerts: LiveData<List<UserAlerts>>
-    fun insertUserAlert(userAlerts:UserAlerts)
+    fun insertUserAlert(userAlerts:UserAlerts):Long
     fun deleteUserAlert(userAlert: UserAlerts)
+
 
 
 }

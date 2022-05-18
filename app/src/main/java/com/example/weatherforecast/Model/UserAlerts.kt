@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "UserAlerts")
 data class UserAlerts(
                 @PrimaryKey(autoGenerate = true)
-                val id: Long? = null,
+                var id: Long? = null,
                 @ColumnInfo(name = "startLongDate")
                 var startLongDate:Long,
                 @ColumnInfo(name = "endLongDate")

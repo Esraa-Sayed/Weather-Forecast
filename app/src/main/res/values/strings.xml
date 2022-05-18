@@ -51,5 +51,15 @@
     <string name="alarm">Alarm</string>
     <string name="save">Save</string>
     <string name="notificationAlertsOption">Notification</string>
-
+    <string name="NoAlerts">No Alerts</string>
+    <string name="dismiss">dismiss</string>
+    <string name="weather_alert">Weather alert</string>
+    <string name="draw_overlays">Please, Enable Draw Overlays permission.</string>
+    <string name="draw_overlays_description">You will not receive notifications while the app is in the background if you disable these permissions.\n\nEnable…\n1) Display pop-up windows while running in the background \n2) Display pop-up window</string>
+    <string name="go_to_settings">Go to Settings</string>
+    <string name="error_msg_permission_required">Permission required!\nPlease, give the permission to work correctly!</string>
+    <string name="empty_alarm_from">You must select (From) date and time!</string>
+    <string name="empty_alarm_to">You must select (To) date and time!</string>
+    <string name="warning">Warning</string>
+    <string name="ok">OK</string>
 </resources>

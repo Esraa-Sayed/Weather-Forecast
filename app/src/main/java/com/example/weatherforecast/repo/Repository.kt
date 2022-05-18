@@ -207,8 +207,9 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
     override val allStoredAlerts: LiveData<List<UserAlerts>>
         get() = localSource!!.allStoredUserAlerts
 
-    override fun insertUserAlert(userAlert: UserAlerts) {
-        localSource!!.insertUserAlerts(userAlert)
+    override fun insertUserAlert(userAlert: UserAlerts):Long{
+        return localSource!!.insertUserAlerts(userAlert)
+
     }
 
     override fun deleteUserAlert(userAlert: UserAlerts) {

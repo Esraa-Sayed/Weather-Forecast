@@ -51,4 +51,15 @@
     <string name="alarm">تنبيه</string>
     <string name="save">حفظ</string>
     <string name="notificationAlertsOption">أشعار</string>
+    <string name="NoAlerts">No Alerts</string>
+    <string name="dismiss">dismiss</string>
+    <string name="weather_alert">Weather alert</string>
+    <string name="draw_overlays">من فضلكـ ، قم بتفعيل إذن الظهور فوق التطبيقات الأخرى.</string>
+    <string name="draw_overlays_description">لن تستقبل أي تنبيهات أثناء وجود التطبيق في الخلفية إذا قمت برفض أو تعطيل هذه الأذونات\n\nقم بتفعيل…\n1) عرض النوافذ المنبثقة أثناء التشغيل في الخلفية\n2) عرض نافذة منبثقة</string>
+    <string name="go_to_settings">اذهب إلى الإعدادات</string>
+    <string name="error_msg_permission_required">الإذن مطلوب! \nمن فضلكـ ، وافق على الإذن للعمل بشكل صحيح!</string>
+    <string name="empty_alarm_from">يجب عليكـ اختيار (بداية) التاريخ و الوقت أولاََ!</string>
+    <string name="empty_alarm_to">يجب عليكـ اختيار (نهاية) التاريخ و الوقت أولاََ!</string>
+    <string name="warning">تحذير</string>
+    <string name="ok">موافق</string>
 </resources>

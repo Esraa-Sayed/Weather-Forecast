@@ -11,7 +11,7 @@ interface AlertsUserDAO {
     val getUserAlerts: LiveData<List<UserAlerts>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUserAlerts(userAlerts: UserAlerts)
+    fun insertUserAlerts(userAlerts: UserAlerts):Long
 
     @Delete
     fun deleteUserAlerts(userAlerts: UserAlerts)

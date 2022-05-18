@@ -1,5 +1,6 @@
 package com.example.weatherforecast.AlertScreen.view
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.Dialog
@@ -19,21 +20,27 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.PowerManager
+import android.provider.Settings
+import android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
 import android.util.Log
 import android.widget.Button
 import android.widget.RadioButton
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherforecast.AlertScreen.viewModel.AlertsViewModel
 import com.example.weatherforecast.AlertScreen.viewModel.AlertsViewModelFactory
 import com.example.weatherforecast.Constants.AlertsConstants
-import com.example.weatherforecast.Constants.SharedPrefrencesKeys
-import com.example.weatherforecast.LocaleHelperChangeLanguage.LocaleHelper
 import com.example.weatherforecast.Model.UserAlerts
+import com.example.weatherforecast.Model.WeatherModel
+import com.example.weatherforecast.WorkManager.WorkRequestManager.createWorkRequest
 import com.example.weatherforecast.db.ConcreteLocalSource
 import com.example.weatherforecast.repo.Repository
-import com.example.weatherforecast.viewModel.MainSettingFavouriteViewModel
-import com.example.weatherforecast.viewModel.MainSettingFavouriteViewModelFactory
-import java.text.ParseException
 import java.text.SimpleDateFormat
 
 
@@ -50,6 +57,8 @@ class AlertsFragment : Fragment(),OnButtonClickListener {
     private lateinit var saveAlertsData: Button
     private lateinit var endDateid: EditText
     private lateinit var alertOptions: RadioGroup
+    private lateinit var  userAlerts: UserAlerts
+    private lateinit var  weatherModel: WeatherModel
     private var startDate: Calendar = Calendar.getInstance()
     private var endDate: Calendar =  Calendar.getInstance()
     private var option = "alarm"
@@ -102,7 +111,23 @@ class AlertsFragment : Fragment(),OnButtonClickListener {
         alertsViewModel.getUserAlerts().observe(viewLifecycleOwner, {
             updateAdapter(it)
         })
+        alertsViewModel.id.observe(viewLifecycleOwner, { alert ->
+            userAlerts.id = alert
+            
+            alertsViewModel.getLocalWeatherModele().observe(viewLifecycleOwner,{
+                weatherModel = it[0]
+                if (weatherModel.alerts.isNullOrEmpty()){
+                    setOneTimeWorkRequest(userAlerts, getString(R.string.NoAlerts), weatherModel.current.weather[0].icon)
+                }else{
+                    setOneTimeWorkRequest(userAlerts, weatherModel.alerts!![0].tags[0],weatherModel.current.weather[0].icon)
+                }
+            })
+        })
+        
 
+    }
+    private fun setOneTimeWorkRequest(alert: UserAlerts, description: String, icon: String) {
+        createWorkRequest(alert, description, icon, myView.context,userAlerts.startLongDate)
     }
 
     private fun updateAdapter(userAlerts: List<UserAlerts>) {
@@ -111,7 +136,31 @@ class AlertsFragment : Fragment(),OnButtonClickListener {
 
     private fun  addListeners(){
         addAlertsFloatingActionButton.setOnClickListener {
-            dialog.show()
+
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            val intent = Intent()
+//            val packageName: String = myView.context.packageName
+//            val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+//            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+//                intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+//                intent.data = Uri.parse("package:$packageName")
+//                startActivity(intent)
+//            }
+//        }
+            val pm = view!!.context.getSystemService(Context.POWER_SERVICE) as PowerManager
+            if (!Settings.canDrawOverlays(view!!.context)) {
+                    askForDrawOverlaysPermission()
+            }
+            else if (!pm.isIgnoringBatteryOptimizations(myView.context.packageName)) {
+                Log.e("TAG", "addListeners: *******" )
+                val intent = Intent()
+                intent.action = ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                intent.data = Uri.parse("package:" + view!!.context.packageName)
+                startActivity(intent)
+            } else {
+                dialog.show()
+            }
+
         }
         startDateid.setOnClickListener {
              showDateTimePicker(AlertsConstants.START_EDIT_TEXT)
@@ -125,10 +174,10 @@ class AlertsFragment : Fragment(),OnButtonClickListener {
                 val radioButton:RadioButton = dialog.findViewById(checkedId)
                 option = radioButton.getText().toString()
                 if (option == getString(R.string.alarm)) {
-                    option = "alarm"
+                    option = AlertsConstants.ALARM
                 }
                 else {
-                    option = "notification"
+                    option = AlertsConstants.NOTIFICATION
                 }
         }
 
@@ -144,14 +193,52 @@ class AlertsFragment : Fragment(),OnButtonClickListener {
                 Log.e("TAG", "startDate :$startLongDate")
                 Log.e("TAG", "endDate :$endLongDate")
                 Log.e("TAG", "option :$option")
+
                 startDateid.setText("")
                 endDateid.setText("")
                 dialog.cancel()
             }
         }
     }
+    private fun askForDrawOverlaysPermission() {
+        if (!Settings.canDrawOverlays(view!!.context)) {
+            if ("xiaomi" == Build.MANUFACTURER.lowercase(Locale.ROOT)) {
+                val intent = Intent("miui.intent.action.APP_PERM_EDITOR")
+                intent.setClassName(
+                    "com.miui.securitycenter",
+                    "com.miui.permcenter.permissions.PermissionsEditorActivity"
+                )
+                intent.putExtra("extra_pkgname", view!!.context.packageName)
+                AlertDialog.Builder(view!!.context)
+                    .setTitle(R.string.draw_overlays)
+                    .setMessage(R.string.draw_overlays_description)
+                    .setPositiveButton(R.string.go_to_settings) { dialog, which ->
+                        startActivity(
+                            intent
+                        )
+                    }
+                    .setIcon(R.drawable.ic_warning)
+                    .show()
+            } else {
+                AlertDialog.Builder(view!!.context)
+                    .setTitle(R.string.warning)
+                    .setMessage(R.string.error_msg_permission_required)
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        val permissionIntent = Intent(
+                            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:" + view!!.context.packageName)
+                        )
+                        runtimePermissionResultLauncher.launch(permissionIntent)
+                    }
+                    .setIcon(R.drawable.ic_warning)
+                    .show()
+            }
+        }
+
+    }
+    private val runtimePermissionResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
     private fun storeDataInRoom(){
-        val userAlerts = UserAlerts(startLongDate = startLongDate,endLongDate = endLongDate, alertOption = option)
+         userAlerts = UserAlerts(startLongDate = startLongDate,endLongDate = endLongDate, alertOption = option)
         alertsViewModel.insertUserAlerts(userAlerts)
     }
     private fun showDateTimePicker(label:String){

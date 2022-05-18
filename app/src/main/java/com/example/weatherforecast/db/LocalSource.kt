@@ -14,7 +14,7 @@ interface LocalSource {
     fun deleteFavouriateModelmovie(favouriteModel: FavouriteModel)
     val allStoredFavouriteModel: LiveData<List<FavouriteModel>>
 
-    fun insertUserAlerts(userAlerts: UserAlerts)
+    fun insertUserAlerts(userAlerts: UserAlerts):Long
     fun deleteUserAlerts(userAlerts: UserAlerts)
     val allStoredUserAlerts: LiveData<List<UserAlerts>>
 }
