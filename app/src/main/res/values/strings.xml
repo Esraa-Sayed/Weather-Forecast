@@ -52,7 +52,7 @@
     <string name="save">Save</string>
     <string name="notificationAlertsOption">Notification</string>
     <string name="NoAlerts">No Alerts</string>
-    <string name="dismiss">dismiss</string>
+    <string name="dismiss">Dismiss</string>
     <string name="weather_alert">Weather alert</string>
     <string name="draw_overlays">Please, Enable Draw Overlays permission.</string>
     <string name="draw_overlays_description">You will not receive notifications while the app is in the background if you disable these permissions.\n\nEnable…\n1) Display pop-up windows while running in the background \n2) Display pop-up window</string>
