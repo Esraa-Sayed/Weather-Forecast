@@ -12,10 +12,14 @@ https://user-images.githubusercontent.com/53404081/169247360-e0501455-113a-4d6e-
 ## Project functionality:
   * MVVM
   * Room
-  * Retrofit 
+  * Retrofit
+  * Gson
   * Coroutine
-  * Work manager
+  * Coroutine worker
   * Notification
+  * Glide
+  * Navigation component
+  * LBS(Location Based Service)
   * minSdk 27
   * targetSdk 32
   ## Screenshots
