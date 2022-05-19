@@ -26,8 +26,8 @@ class Repository private constructor(var remoteSource: RemoteSource?, var localS
 
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
-    private var longitude: Float = 0.0f;
-    private var latitude: Float = 0.0f;
+    private var longitude: Float = 0.0f
+    private var latitude: Float = 0.0f
     companion object{
         private var instance: Repository? = null
         fun getInstance(remoteSource: RemoteSource?,localSource: LocalSource?): Repository {

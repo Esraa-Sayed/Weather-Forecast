@@ -24,7 +24,7 @@ class SharedPref private constructor(private var context: Context) {
         val editor = preferences.edit()
         editor.putString(SharedPrefrencesKeys.windSpeed, "Meter/Sec")
         editor.putString(SharedPrefrencesKeys.temperature, "Celsius")
-        editor.putString(SharedPrefrencesKeys.language, getCurrentDeviceLanguage())
+       // editor.putString(SharedPrefrencesKeys.language, getCurrentDeviceLanguage())
         editor.putFloat(SharedPrefrencesKeys.longitude, longitude)
         editor.putFloat(SharedPrefrencesKeys.latitude, latitude)
         editor.putString(SharedPrefrencesKeys.locationState, "GPS")
@@ -45,7 +45,8 @@ class SharedPref private constructor(private var context: Context) {
     }
     fun readStringFromSharedPreferences(dataNeed: String): String {
         val preferences = context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
-
+        if(dataNeed == SharedPrefrencesKeys.language)
+            return preferences.getString(dataNeed, getCurrentDeviceLanguage()).toString()
         return preferences.getString(dataNeed, "notFound").toString()
     }
     fun setStringToSharedPrefrences(key: String, value: String) {
