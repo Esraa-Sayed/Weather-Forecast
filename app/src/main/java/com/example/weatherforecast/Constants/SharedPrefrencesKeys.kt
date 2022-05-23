@@ -20,8 +20,9 @@ object SharedPrefrencesKeys {
    fun getCityNameFromLatAndLong(context: Context, language:String, latitude:Double, longitude:Double):String{
        val geocoder = Geocoder(context, Locale(language))
        val addresses = geocoder.getFromLocation(latitude, longitude, 1)
-       if (!addresses.isNullOrEmpty()){
-          return addresses[0].adminArea
+       if (!addresses.isNullOrEmpty() && !addresses[0].adminArea.isNullOrEmpty()){
+
+           return addresses[0].adminArea
        }
        return context.getString(R.string.Unknown_city)
    }

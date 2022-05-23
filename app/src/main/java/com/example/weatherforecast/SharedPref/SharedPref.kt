@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.example.weatherforecast.Constants.SharedPrefrencesKeys
 import com.example.weatherforecast.Model.SharedPrefrencesDataClass
 import com.example.weatherforecast.Network.RemoteSource
+import com.example.weatherforecast.R
 import com.example.weatherforecast.db.LocalSource
 import com.example.weatherforecast.repo.Repository
 import java.util.*
@@ -22,12 +23,12 @@ class SharedPref private constructor(private var context: Context) {
         val preferences =
             context.getSharedPreferences(SharedPrefrencesKeys.preferenceFile, Context.MODE_PRIVATE)
         val editor = preferences.edit()
-        editor.putString(SharedPrefrencesKeys.windSpeed, "Meter/Sec")
-        editor.putString(SharedPrefrencesKeys.temperature, "Celsius")
+        editor.putString(SharedPrefrencesKeys.windSpeed, context.getString(R.string.meter_sec))
+        editor.putString(SharedPrefrencesKeys.temperature, context.getString(R.string.celsius))
        // editor.putString(SharedPrefrencesKeys.language, getCurrentDeviceLanguage())
         editor.putFloat(SharedPrefrencesKeys.longitude, longitude)
         editor.putFloat(SharedPrefrencesKeys.latitude, latitude)
-        editor.putString(SharedPrefrencesKeys.locationState, "GPS")
+        editor.putString(SharedPrefrencesKeys.locationState, context.getString(R.string.gps))
         editor.putBoolean(SharedPrefrencesKeys.notification, true)
         editor.putBoolean(SharedPrefrencesKeys.isNotFirstTime, true)
         editor.commit()
